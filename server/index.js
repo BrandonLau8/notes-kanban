@@ -32,31 +32,31 @@ app.post('/create', (req, res) => {
     console.log(req.body);
 });
 
-// app.get('/kanban', (req, res) => {
-//     db.query('SELECT * FROM kanban', (err, result) => {
-//         if (err) {
-//             console.log(err);
-//         } else {
-//             res.send(result);
-//         }
-//     });
-// });
+app.get('/boxes', (req, res) => {
+    db.query('SELECT * FROM kanban', (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+    });
+});
 
-// app.put('/update', (req, res) => {
-//     const id = req.body.id;
-//     const content = req.body.content;
-//     db.query(
-//         'UPDATE kanban SET content = ? WHERE id = ?',
-//         [content, id],
-//         (err, result) => {
-//             if (err) {
-//                 console.log(err);
-//             } else {
-//                 res.send(result);
-//             }
-//         }
-//     );
-// });
+app.put('/update', (req, res) => {
+    const id = req.body.id;
+    const content = req.body.content;
+    db.query(
+        'UPDATE kanban SET content = ? WHERE id = ?',
+        [content, id],
+        (err, result) => {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send(result);
+            }
+        }
+    );
+});
 
 // app.delete('/delete:id', (req, res) => {
 //     const id = req.params.id;

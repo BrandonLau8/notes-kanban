@@ -5,26 +5,42 @@ const App = () => {
   const storedData = localStorage.getItem("data");
   const [box, setBox] = useState(JSON.parse(storedData) || []);
   const [input, setInput] = useState("");
-  const [content, setContent] = useState('');
 
   const saveBox = (item) => {
-    axios.post("http://localhost:3001/create", {
-      input: item.input,
-      content: item.content,
-    }).then(() => {
-      console.log('success');
-    })
+    axios
+      .put("http://localhost:3001/update", {
+        content: item.content,
+        id: item.id
+      })
+      .then(() => {
+        setBox(box.map((val) => {
+          return val.id == id 
+          ? {
+            id: val.id,
+            content: val.content
+          }
+          : val;
+        }))
+      });
+  };
+
+  const getBox = () => {
+    axios.get("http://localhost:3001/boxes").then((response) => {
+      setBox(response.data);
+    });
   };
 
   const handleAddBox = (e) => {
     e.preventDefault();
-    console.log("Form submitted with value:", input);
-    if (box.length < 6 && input) {
-      const newBox = { input: input, key: box.length, content: "" };
-      setBox((prevBox) => [...prevBox, newBox]);
-      console.log(newBox);
-      setInput("");
-    }
+    const newBox = { input: input, key: box.length, content: "" };
+    axios
+      .post("http://localhost:3001/create", {
+        input: input
+      })
+      .then(() => {
+        setBox((prevBox) => [...prevBox, newBox]);
+        setInput("");
+      });
   };
 
   const handleDeleteBox = (index) => {
@@ -50,6 +66,7 @@ const App = () => {
   return (
     <>
       <button onClick={handleAddBox}>Add TextArea</button>
+      <button onClick={getBox}>Show Text Areas</button>
 
       <input
         type="text"
