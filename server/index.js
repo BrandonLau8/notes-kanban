@@ -43,11 +43,12 @@ app.get('/boxes', (req, res) => {
 });
 
 app.put('/update', (req, res) => {
-    const id = req.body.id;
+    console.log(req.body)
     const content = req.body.content;
-    db.query(
-        'UPDATE kanban SET content = ? WHERE id = ?',
-        [content, id],
+    const input = req.body.input;
+        db.query(
+        'UPDATE kanban SET content = ? WHERE input = ?',
+        [content, input],
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -58,19 +59,20 @@ app.put('/update', (req, res) => {
     );
 });
 
-// app.delete('/delete:id', (req, res) => {
-//     const id = req.params.id;
-//     db.query(
-//         'DELETE FROM kanban WHERE id = ?', 
-//         id, 
-//         (err, result) => {
-//             if (err) {
-//                 console.log(err);
-//             } else {
-//                 res.send(result);
-//             }
-//         });
-// });
+app.delete('/delete/:input', (req, res) => {
+    const input = req.params.input;
+    console.log(req.params)
+    db.query(
+        'DELETE FROM kanban WHERE input = ?', 
+        input, 
+        (err, result) => {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send(result);
+            }
+        });
+});
 
 app.listen(3001, () => {
     console.log('Server running on port 3001');

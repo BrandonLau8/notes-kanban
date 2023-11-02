@@ -10,17 +10,10 @@ const App = () => {
     axios
       .put("http://localhost:3001/update", {
         content: item.content,
-        id: item.id
+        input: item.input,
       })
-      .then(() => {
-        setBox(box.map((val) => {
-          return val.id == id 
-          ? {
-            id: val.id,
-            content: val.content
-          }
-          : val;
-        }))
+      .then((response) => {
+        alert("update");
       });
   };
 
@@ -33,20 +26,33 @@ const App = () => {
   const handleAddBox = (e) => {
     e.preventDefault();
     const newBox = { input: input, key: box.length, content: "" };
-    axios
-      .post("http://localhost:3001/create", {
-        input: input
-      })
-      .then(() => {
-        setBox((prevBox) => [...prevBox, newBox]);
-        setInput("");
-      });
+    {
+      input
+        ? axios
+            .post("http://localhost:3001/create", {
+              input: input,
+            })
+            .then(() => {
+              setBox((prevBox) => [...prevBox, newBox]);
+              setInput("");
+            })
+        : null;
+    }
   };
 
-  const handleDeleteBox = (index) => {
+  const handleDeleteBox = (item) => {
     const boxes = [...box];
-    boxes.splice(index, 1);
-    setBox(boxes);
+    axios
+      .delete(`http://localhost:3001/delete/${item.input}`, {
+        data: { input: item.input},
+      })
+      .then(() => {
+        setBox(
+          boxes.filter((val) => {
+            return val.input != item.input;
+          })
+        );
+      });
   };
 
   const handleBoxChange = (index, value) => {
@@ -83,8 +89,12 @@ const App = () => {
           >
             <div>
               <label>{item.input}</label>
-              <button onClick={handleDeleteBox}>Delete TextArea</button>
-              <button onClick={() => saveBox(item)}>Save TextArea</button>
+              <button onClick={() => handleDeleteBox(item)}>
+                Delete TextArea
+              </button>
+              <button onClick={() => saveBox(item, item.input)}>
+                Save TextArea
+              </button>
             </div>
 
             <textarea
