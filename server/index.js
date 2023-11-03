@@ -2,16 +2,33 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql2');
 const cors = require('cors');
+require('dotenv').config()
 
 app.use(cors());
 app.use(express.json());
 
-const db = mysql.createConnection({
-    user: 'root',
-    host: 'localhost',
-    password: 'password',
-    database: 'kanban',
+const DB_HOST = process.env.DB_HOST
+const DB_USER = process.env.DB_USER
+const DB_PASSWORD = process.env.DB_PASSWORD
+const DB_DATABASE = process.env.DB_DATABASE
+const DB_PORT = process.env.DB_PORT
+
+const db = mysql.createPool({
+    connectionLimit: 100,
+    user: DB_USER,
+    host: DB_HOST,
+    password: DB_PASSWORD,
+    database: DB_DATABASE,
+    port: DB_PORT
 });
+
+const port = process.env.PORT
+
+
+db.getConnection((err, connection) => {
+    if (err) throw (err)
+    console.log('DB connected succesfully:' + connection.threadId)
+})
 
 app.post('/create', (req, res) => {
     
@@ -74,6 +91,5 @@ app.delete('/delete/:input', (req, res) => {
         });
 });
 
-app.listen(3001, () => {
-    console.log('Server running on port 3001');
-})
+
+app.listen(port, () => console.log(`Server Started on port ${port}...` ))
