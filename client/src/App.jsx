@@ -6,7 +6,7 @@ const App = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
 
-  const login = async () => {
+  const register = async () => {
     try {
       const response = await axios.post("http://localhost:3001/createuser", {
         username: user,
@@ -24,6 +24,25 @@ const App = () => {
     }
   };
 
+  const login = async () => {
+    try {
+      const response = await axios.post('http://localhost:3001/login', {
+        username: user,
+        password: password,
+      });
+    
+    if (response.status === 200) {
+      alert("User Logged In");
+    } else {
+      console.error("Unexpected status:", response.status);
+      alert("Failed to login user. Check console for details.");
+    }
+  } catch (error) {
+    console.error("Error logging user:", error);
+    alert("Failed to log user");
+  }
+  };
+
   const changeUserInput = (e) => {
     setUser(e.target.value);
   };
@@ -32,7 +51,12 @@ const App = () => {
     setPassword(e.target.value);
   };
 
-  const submitForm = (e) => {
+  const createUser = (e) => {
+    e.preventDefault();
+    register(user, password);
+  };
+
+  const loginUser = (e) => {
     e.preventDefault();
     login(user, password);
   };
@@ -65,7 +89,8 @@ const App = () => {
           />
         </form>
         <section>
-          <button onClick={submitForm}>Login</button>
+          <button onClick={createUser}>Register</button>
+          <button onClick={loginUser}>Login</button>
         </section>
       </div>
       {/* <Notes /> */}
