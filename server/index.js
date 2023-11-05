@@ -4,6 +4,7 @@ const mysql = require("mysql2/promise");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
+const jwt = require('jsonwebtoken')
 
 app.use(cors());
 app.use(express.json());
@@ -24,6 +25,15 @@ const db = mysql.createPool({
 });
 
 const port = process.env.PORT;
+
+const generateAccessToken = (user) => {
+    try {
+        return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
+} catch (error) {
+    console.error('Error generating access token:', error);
+    throw error
+}
+}
 
 //Connect to DB
 db.getConnection((err, connection) => {
@@ -88,7 +98,10 @@ app.post("/login", async (req, res) => {
 
         if (await bcrypt.compare(password, hashedPassword)) {
             console.log('------> Login Successful');
-            res.status(200).json({message: `${username} is logged in!`});
+            console.log('----> Generating accessToken')
+            const token = generateAccessToken({username: username})
+            console.log(token)
+            res.status(200).json({message: `${username} is logged in! with ${token}`});
         } else {
             console.log('----> Password Incorrect');
             res.status(401).json({message: 'Password Incorrect!'})
@@ -163,3 +176,5 @@ app.delete("/delete/:input", (req, res) => {
 
 //Start Server
 app.listen(port, () => console.log(`Server Started on port ${port}...`));
+
+// module.exports = generateAccessToken
