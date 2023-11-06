@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Notes from "./components/Notes";
 
+
 const App = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
@@ -32,7 +33,8 @@ const App = () => {
       });
     
     if (response.status === 200) {
-      alert("User Logged In");
+      // alert("User Logged In");
+      window.location.href = '/test';
     } else {
       console.error("Unexpected status:", response.status);
       alert("Failed to login user. Check console for details.");

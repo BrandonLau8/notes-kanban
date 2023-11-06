@@ -4,10 +4,12 @@ const mysql = require("mysql2/promise");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
-const jwt = require('jsonwebtoken')
+const { generateAccessToken, validateToken } = require("./JWT");
+const cookieParser = require("cookie-parser");
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 const DB_HOST = process.env.DB_HOST;
 const DB_USER = process.env.DB_USER;
@@ -25,15 +27,6 @@ const db = mysql.createPool({
 });
 
 const port = process.env.PORT;
-
-const generateAccessToken = (user) => {
-    try {
-        return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15m'})
-} catch (error) {
-    console.error('Error generating access token:', error);
-    throw error
-}
-}
 
 //Connect to DB
 db.getConnection((err, connection) => {
@@ -90,26 +83,49 @@ app.post("/login", async (req, res) => {
     const [result] = await connection.query(search_query);
     connection.release();
 
+    //User does not exist
     if (result.length === 0) {
-        console.log('-----> User does not exist');
-        res.sendStatus(401);
+      console.log("-----> User does not exist");
+      res.sendStatus(401);
     } else {
-        const hashedPassword = result[0].password;
+      const hashedPassword = result[0].password;
 
-        if (await bcrypt.compare(password, hashedPassword)) {
-            console.log('------> Login Successful');
-            console.log('----> Generating accessToken')
-            const token = generateAccessToken({username: username})
-            console.log(token)
-            res.status(200).json({message: `${username} is logged in! with ${token}`});
-        } else {
-            console.log('----> Password Incorrect');
-            res.status(401).json({message: 'Password Incorrect!'})
-        }
+      //Login Successful
+      if (await bcrypt.compare(password, hashedPassword)) {
+        console.log("------> Login Successful");
+        console.log("----> Generating accessToken");
+
+        const accessToken = generateAccessToken({ username: username });
+        console.log(accessToken);
+
+        res.cookie("access-token", accessToken, {
+          httpOnly: true,
+          maxAge: 3600000,
+        });
+        res
+          .status(200)
+          .json({ message: `${username} is logged in! with ${accessToken}` });
+      }
+      //Incorrect Password
+      else {
+        console.log("----> Password Incorrect");
+        res.status(401).json({ message: "Password Incorrect!" });
+      }
     }
   } catch (err) {
-    console.error('Error:', err);
-    res.sendStatus(500)
+    console.error("Error:", err);
+    res.sendStatus(500);
+  }
+});
+
+//Validate User
+app.get("/profile", validateToken, (req, res) => {
+  const accessToken = req.cookies.accessToken;
+
+  if(accessToken) {
+    res.redirect('/test');
+  } else {
+    res.send('Unauthorized');
   }
 });
 
@@ -176,5 +192,3 @@ app.delete("/delete/:input", (req, res) => {
 
 //Start Server
 app.listen(port, () => console.log(`Server Started on port ${port}...`));
-
-// module.exports = generateAccessToken
