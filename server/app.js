@@ -4,6 +4,7 @@ const mysql = require("mysql2/promise");
 require("dotenv").config();
 const cors = require("cors");
 const bcrypt = require("bcrypt");
+const bodyParser = require('body-parser');
 
 
 const cookieParser = require("cookie-parser");
@@ -39,6 +40,22 @@ const db = mysql.createPool({
 
 const port = process.env.PORT;
 
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'static', 'index.html'));
+})
+
+app.get('/blah', (req, res) => {
+    res.sendFile(__dirname + '/static/login.html')
+})
+
+app.post('/blah', (req, res) => {
+    let username = req.body.username;
+    let password = req.body.password;
+    res.send(`Username: ${username} Password: ${password}`)
+})
+
 
 //Connect to DB
 db.getConnection((err, connection) => {
@@ -46,6 +63,7 @@ db.getConnection((err, connection) => {
   console.log("DB connected succesfully:" + connection.threadId);
   connection.release();
 });
+
 
 
 //Start Server
