@@ -7,7 +7,7 @@ const App = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   //Register
@@ -67,60 +67,11 @@ const App = () => {
     }
   };
 
-  const changeUserInput = (e) => {
-    setUser(e.target.value);
-  };
 
-  const changePasswordInput = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const createUser = (e) => {
-    e.preventDefault();
-    register(user, password);
-  };
-
-  const loginUser = (e) => {
-    e.preventDefault();
-    login(user, password);
-  };
 
   return (
     <>
-      <div
-        style={{
-          display: "grid",
-          backgroundColor: "",
-          justifyContent: "center",
-        }}
-      >
-        <form>
-          <label>username</label>
-          <input
-            type="text"
-            value={user}
-            placeholder="Username"
-            onChange={changeUserInput}
-          />
-        </form>
-        <form>
-          <label>password</label>
-          <input
-            type="password"
-            value={password}
-            placeholder="Password"
-            onChange={changePasswordInput}
-          />
-        </form>
-        <section>
-          <button onClick={createUser} disabled={loading}>
-            Register
-          </button>
-          <button onClick={loginUser} disabled={loading}>
-            Login
-          </button>
-        </section>
-      </div>
+      
       {/* <Notes /> */}
     </>
   );

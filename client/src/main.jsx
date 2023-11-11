@@ -4,6 +4,8 @@ import App from "./App.jsx";
 import Test from "./routes/Test.jsx";
 import ErrorPage from "./routes/error-page.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Login from "./components/Login.jsx";
+import Tweet from "./components/Tweet.jsx";
 
 const router = createBrowserRouter([
   {
@@ -12,8 +14,12 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: `/test/:user`,
-    element: <Test />,
+    path: `/tweets`,
+    element: <Tweet />,
+  },
+  {
+    path: `/login`,
+    element: <Login />,
   },
 ]);
 
