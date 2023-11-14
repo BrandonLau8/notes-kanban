@@ -4,18 +4,17 @@ import App from "./App.jsx";
 import Test from "./routes/Test.jsx";
 import ErrorPage from "./routes/error-page.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+// import reportWebVitals from './reportWebVitals'
+
 import Login from "./components/Login.jsx";
-import Tweet from "./components/Tweet.jsx";
+
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
-  },
-  {
-    path: `/tweets`,
-    element: <Tweet />,
   },
   {
     path: `/login`,
@@ -28,3 +27,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <RouterProvider router={router} />
   </React.StrictMode>
 );
+
+// reportWebVitals();
