@@ -91,7 +91,7 @@ const Login = () => {
             />
           </div>
 
-          <div className="form-group">
+          {/* <div className="form-group">
             <label htmlFor="password">Password</label>
             <Input
               type="password"
@@ -101,25 +101,25 @@ const Login = () => {
               onChange={onChangePassword}
               validations={[required]}
             />
-          </div>
+          </div> */}
 
-          <div className="form-group">
+          {/* <div className="form-group">
             <button className="btn btn-primary btn-block" disabled={loading}>
               {loading && (
                 <span className="spinner-border spinner-border-sm"></span>
               )}
               <span>Login</span>
             </button>
-          </div>
+          </div> */}
 
-          {message && (
+          {/* {message && (
             <div className="form-group">
               <div className="alert alert-danger" role="alert">
                 {message}
               </div>
             </div>
-          )}
-          <CheckButton style={{ display: "none" }} ref={checkBtn} />
+          )} */}
+          {/* <CheckButton style={{ display: "none" }} ref={checkBtn} /> */}
         </Form>
       </div>
     </div>

@@ -4,27 +4,30 @@ import App from "./App.jsx";
 import Test from "./routes/Test.jsx";
 import ErrorPage from "./routes/error-page.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 // import reportWebVitals from './reportWebVitals'
 
 import Login from "./components/Login.jsx";
 
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: `/login`,
-    element: <Login />,
-  },
-]);
+// const router = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <App />,
+//     errorElement: <ErrorPage />,
+//   },
+//   {
+//     path: `/login`,
+//     element: <Login />,
+//   },
+// ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <BrowserRouter>
+    <App />
+    </BrowserRouter>
   </React.StrictMode>
 );
 
