@@ -1,7 +1,7 @@
-import React, { useState, useRef } from "react";
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
+import React, { useState } from "react";
+
+import { useForm } from "react-hook-form";
+
 import { isEmail } from "validator";
 
 import AuthService from "../services/auth.service";
@@ -34,21 +34,27 @@ const vusername = (value) => {
 
 const vpassword = (value) => {
   if (value.length < 3 || value.length > 40) {
-    <div className="invalid-feedback d-block">
-      Password has to be between 3 and 40 characters.
-    </div>;
+    return (
+      <div className="invalid-feedback d-block">
+        Password has to be between 3 and 40 characters.
+      </div>
+    );
   }
 };
 
-const Register = (props) => {
-  const form = useRef();
-  const checkBtn = useRef();
-
+const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
 
   const onChangeUsername = (e) => {
     const username = e.target.value;
@@ -58,113 +64,127 @@ const Register = (props) => {
   const onChangeEmail = (e) => {
     const email = e.target.value;
     setEmail(email);
-  }; 
-  
+  };
+
   const onChangePassword = (e) => {
     const password = e.target.value;
     setPassword(password);
   };
 
-  const handleRegister = (e) => {
-    e.preventDefault();
-
+  const handleRegister = async (data) => {
     setMessage("");
     setSuccessful(false);
 
-    form.current.validateAll();
+    try {
+      await AuthService.register(data.username, data.email, data.password);
 
-    if (checkBtn.current.context._errors.length === 0) {
-      AuthService.register(username, email, password).then(
-        (response) => {
-          setMessage(response.data.message);
-          setSuccessful(true);
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
+      setMessage('hello');
+      setSuccessful(true);
+    } catch (error) {
+      const resMessage =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
 
-          setMessage(resMessage);
-          setSuccessful(false);
-        }
-      );
+      setMessage(resMessage);
+      setSuccessful(false);
     }
-  };
+  }
 
-  return (
-    <div className="col-md-12">
-      <div className="card card-container">
-        <img
-          src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-          alt="profile-img"
-          className="profile-img-card"
-        />
+    return (
+      <div className="col-md-12"> 
+        <div className="card card-container">
+          <img
+            src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+            alt="profile-img"
+            className="profile-img-card"
+          />
 
-        <Form onSubmit={handleRegister} ref={form}>
-          {!successful && (
-            <div>
+          <form onSubmit={handleSubmit(handleRegister)}>
+            {!successful && (
+              <div>
+                <div className="form-group">
+                  <label htmlFor="username">Username</label>
+                  <input
+                    type="text"
+                    className={`form-control ${
+                      errors.username ? "is-invalid" : ""
+                    }`}
+                    {...register("username", {
+                      required: true,
+                      validate: vusername,
+                    })}
+                  />
+                  {errors.username && (
+                    <div className="invalid-feedback">
+                      {required}
+                    </div>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="text"
+                    className={`form-control ${
+                      errors.email ? "is-invalid" : ""
+                    }`}
+                    {...register("email", {
+                      required: true,
+                      validate: validEmail,
+                    })}
+                  />
+                  {errors.email && (
+                    <div className="invalid-feedback">
+                      {errors.email.message}
+                    </div>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="password">Password</label>
+                  <input
+                    type="password"
+                    className={`form-control ${
+                      errors.password ? "is-invalid" : ""
+                    }`}
+                    {...register("password", {
+                      required: true,
+                      validate: vpassword,
+                    })}
+                  />
+                  {errors.password && (
+                    <div className="invalid-feedback">
+                      {errors.password.message}
+                    </div>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <button className="btn btn-primary btn-block">Sign Up</button>
+                </div>
+              </div>
+            )}
+
+            {message && (
               <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  name="username"
-                  value={username}
-                  onChange={onChangeUsername}
-                  validations={[required, vusername]}
-                />
+                <div
+                  className={
+                    successful ? "alert alert-success" : "alert alert-danger"
+                  }
+                  role="alert"
+                >
+                  {message}
+                </div>
               </div>
-
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  name="email"
-                  value={email}
-                  onChange={onChangeEmail}
-                  validations={[required, validEmail]}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  name="password"
-                  value={password}
-                  onChange={onChangePassword}
-                  validations={[required, vpassword]}
-                />
-              </div>
-
-              <div className="form-group">
-                <button className="btn btn-primary btn-block">Sign Up</button>
-              </div>
-            </div>
-          )}
-
-          {message && (
-            <div className="form-group">
-              <div
-                className={
-                  successful ? "alert alert-success" : "alert alert-danger"
-                }
-                role="alert"
-              >
-                {message}
-              </div>
-            </div>
-          )}
-          <CheckButton style={{ display: "none" }} ref={checkBtn} />
-        </Form>
+            )}
+          </form>
+        </div>
       </div>
-    </div>
-  );
-};
+      
+    );
+  };
 
 export default Register;
