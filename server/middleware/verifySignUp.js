@@ -3,7 +3,7 @@ const ROLES = db.ROLES; // array for user, admin, moderator
 const User = db.user; 
 
 //During Sign up are there duplicates? 
-checkDuplicateUsernameOrEmail = async (req, res, next) => {
+const checkDuplicateUsernameOrEmail = async (req, res, next) => {
   try {
     //Username in User Object which has username, email, password 
     //findOne is a Sequelize method to find record
@@ -41,7 +41,7 @@ checkDuplicateUsernameOrEmail = async (req, res, next) => {
 
 //Check through each role in array to see if it exists. 
 //Note: there can be duplicates which is why for loop is used
-checkRolesExisted = (req, res, next) => {
+const checkRolesExisted = (req, res, next) => {
   if (req.body.roles) {
     for (let i = 0; i < req.body.roles.length; i++) {
       if (!ROLES.includes(req.body.roles[i])) {
@@ -52,6 +52,7 @@ checkRolesExisted = (req, res, next) => {
       }
     }
   }
+  next();
 };
 
 const verifySignUp = {
