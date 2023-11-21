@@ -1,4 +1,4 @@
-
+import React, {useEffect, useState} from 'react'
 import UserService from "../services/user.service";
 
 const BoardUser = () => {
