@@ -10,26 +10,30 @@ const bcrypt = require("bcrypt");
 
 exports.signup = (req, res) => {
   //Save User to database
-
+  console.log(req.body)
   User.create({
     username: req.body.username,
     email: req.body.email,
     //complete hashing process before allowing program to move on to the next line
     // salt round of 8
-    password: bcrypt.hashSync(req.body.password, 8),
+    password: bcrypt.hashSync(req.body.password, 8)
   })
 
     //If roles are provided in the request body,
     //find all roles in the database where the name matches any of the roles specified.
-    .then((user) => {
+    .then(user => {
+      
       if (req.body.roles) {
+        
         Role.findAll({
           where: {
             name: {
-              [Op.or]: req.body.roles,
+              [Op.or]: req.body.roles
             }
           }
-        }).then((roles) => {
+          
+        }).then(roles => {
+          console.log(roles)
           user.setRoles(roles).then(() => {
             res.send({ message: "User Mod Admin was registered successfully!" });
           });
@@ -38,7 +42,7 @@ exports.signup = (req, res) => {
         //user has role = 1
         user.setRoles([1]).then(() => {
         res.send({ message: "User registered successfully!" });
-        })
+        });
       }
     })
     .catch((error) => {
@@ -54,7 +58,7 @@ exports.signin = (req, res) => {
   })
     .then((user) => {
       if (!user) {
-        res.status(404).send({ message: "User not found." });
+        return res.status(404).send({ message: "User not found." });
       }
 
       const passwordIsvalid = bcrypt.compareSync(

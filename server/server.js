@@ -1,21 +1,9 @@
 const express = require("express");
 const app = express();
-const mysql = require("mysql2");
 require("dotenv").config();
 const cors = require("cors");
-const bcrypt = require("bcrypt");
-const path = require("path");
 const cookieSession = require("cookie-session");
-
-const authRoutes = require("./routes/auth.routes");
-
-// require('./routes/auth.routes')(app)
-
-
-
 const db = require("./models");
-const { verifySignUp } = require("./middleware");
-
 const port = process.env.PORT;
 
 app.use(cors());
@@ -38,17 +26,6 @@ app.use(
     httpOnly: true,
   })
 );
-app.use("/api/auth", authRoutes);
-require("./routes/user.routes")(app);
-
-//Write something on the root page
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to my app" });
-});
-
-app.get("/api/auth/signin", (req, res) => {
-  res.json(verifySignUp);
-});
 
 //Sync to db using sequalize.
 //Force true drops existing tables and recrates them
@@ -57,9 +34,23 @@ db.sequelize.sync({ force: true }).then(() => {
   initial();
 });
 
+//Write something on the root page
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to my app" });
+});
+
+app.post('/test', (req, res) => {
+  res.json({requestBody: req.body})  // <==== req.body will be a parsed JSON object
+})
+
+require('./routes/auth.routes')(app);
+require("./routes/user.routes")(app);
+
+
+
 //Create roles
 const Role = db.role; //Connect to db index connected to role.model
-const initial = () => {
+function initial() {
   Role.create({
     id: 1,
     name: "user",

@@ -8,6 +8,8 @@ const register = (username, email, password) => {
       username,
       email,
       password,
+      
+      
     })
     .then((response) => console.log(response.data))
     .catch((error) => {

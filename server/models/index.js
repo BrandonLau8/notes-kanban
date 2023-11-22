@@ -28,12 +28,12 @@ db.role = require("../models/role.model.js")(sequelize, Sequelize);
 //Many to many association
 //Role can belong to many users through the 'user_roles' join table
 db.role.belongsToMany(db.user, {
-  through: "user_roles",
+  through: "user_roles"
 });
 
 //User can belong to many roles through the 'user_roles' join table
 db.user.belongsToMany(db.role, {
-  through: "user_roles",
+  through: "user_roles"
 });
 
 //Predefined array for roles
