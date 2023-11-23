@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import { useForm } from "react-hook-form";
 
@@ -48,6 +49,19 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState("");
+  const [roles, setRoles] = useState([]);
+
+  // useEffect(() => {
+  //   const fetchRoles = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:3001/api/roles");
+  //       setRoles(response.data.roles);
+  //     } catch (error) {
+  //       console.error("error fetcching roles:", error.message);
+  //     }
+  //   };
+  //   fetchRoles();
+  // }, []);
 
   const {
     register,
@@ -76,9 +90,15 @@ const Register = () => {
     setSuccessful(false);
 
     try {
-      await AuthService.register(data.username, data.email, data.password);
+      console.log(data);
+      await AuthService.register(
+        data.username,
+        data.email,
+        data.password,
+        data.roles
+      );
 
-      setMessage('hello');
+      setMessage("hello");
       setSuccessful(true);
     } catch (error) {
       const resMessage =
@@ -91,100 +111,108 @@ const Register = () => {
       setMessage(resMessage);
       setSuccessful(false);
     }
-  }
-
-    return (
-      <div className="col-md-12"> 
-        <div className="card card-container">
-          <img
-            src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-            alt="profile-img"
-            className="profile-img-card"
-          />
-
-          <form onSubmit={handleSubmit(handleRegister)}>
-            {!successful && (
-              <div>
-                <div className="form-group">
-                  <label htmlFor="username">Username</label>
-                  <input
-                    type="text"
-                    className={`form-control ${
-                      errors.username ? "is-invalid" : ""
-                    }`}
-                    {...register("username", {
-                      required: true,
-                      validate: vusername,
-                    })}
-                  />
-                  {errors.username && (
-                    <div className="invalid-feedback">
-                      {required}
-                    </div>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="text"
-                    className={`form-control ${
-                      errors.email ? "is-invalid" : ""
-                    }`}
-                    {...register("email", {
-                      required: true,
-                      validate: validEmail,
-                    })}
-                  />
-                  {errors.email && (
-                    <div className="invalid-feedback">
-                      {errors.email.message}
-                    </div>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    className={`form-control ${
-                      errors.password ? "is-invalid" : ""
-                    }`}
-                    {...register("password", {
-                      required: true,
-                      validate: vpassword,
-                    })}
-                  />
-                  {errors.password && (
-                    <div className="invalid-feedback">
-                      {errors.password.message}
-                    </div>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <button className="btn btn-primary btn-block">Sign Up</button>
-                </div>
-              </div>
-            )}
-
-            {message && (
-              <div className="form-group">
-                <div
-                  className={
-                    successful ? "alert alert-success" : "alert alert-danger"
-                  }
-                  role="alert"
-                >
-                  {message}
-                </div>
-              </div>
-            )}
-          </form>
-        </div>
-      </div>
-      
-    );
   };
+
+  return (
+    <div className="col-md-12">
+      <div className="card card-container">
+        <img
+          src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+          alt="profile-img"
+          className="profile-img-card"
+        />
+
+        <form onSubmit={handleSubmit(handleRegister)}>
+          {!successful && (
+            <div>
+              <div className="form-group">
+                <label htmlFor="username">Username</label>
+                <input
+                  type="text"
+                  className={`form-control ${
+                    errors.username ? "is-invalid" : ""
+                  }`}
+                  {...register("username", {
+                    required: true,
+                    validate: vusername,
+                  })}
+                />
+                {errors.username && (
+                  <div className="invalid-feedback">{required}</div>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="text"
+                  className={`form-control ${errors.email ? "is-invalid" : ""}`}
+                  {...register("email", {
+                    required: true,
+                    validate: validEmail,
+                  })}
+                />
+                {errors.email && (
+                  <div className="invalid-feedback">{errors.email.message}</div>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  className={`form-control ${
+                    errors.password ? "is-invalid" : ""
+                  }`}
+                  {...register("password", {
+                    required: true,
+                    validate: vpassword,
+                  })}
+                />
+                {errors.password && (
+                  <div className="invalid-feedback">
+                    {errors.password.message}
+                  </div>
+                )}
+              </div>
+
+              {/* New form field for user roles */}
+              <div className="form-group">
+                <label htmlFor="roles">Roles</label>
+                <select
+                  className="form-control"
+                  {...register("roles", {
+                    required: true,
+                  })}
+                >
+                  <option value='admin'>Admin</option>
+                  <option value='user'>User</option>
+                  <option value='user'>Moderator</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <button className="btn btn-primary btn-block">Sign Up</button>
+              </div>
+            </div>
+          )}
+
+          {message && (
+            <div className="form-group">
+              <div
+                className={
+                  successful ? "alert alert-success" : "alert alert-danger"
+                }
+                role="alert"
+              >
+                {message}
+              </div>
+            </div>
+          )}
+        </form>
+      </div>
+    </div>
+  );
+};
 
 export default Register;

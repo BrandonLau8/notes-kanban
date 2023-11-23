@@ -2,15 +2,17 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3001/api/auth/";
 
-const register = (username, email, password) => {
+const register = (username, email, password, roles) => {
   return axios
-    .post(API_URL + "signup", {
-      username,
-      email,
-      password,
-      
-      
-    })
+    .post(
+      API_URL + "signup",
+      {
+        username,
+        email,
+        password,
+        roles,
+      }
+    )
     .then((response) => console.log(response.data))
     .catch((error) => {
       console.error("Request failed:", error.message);
