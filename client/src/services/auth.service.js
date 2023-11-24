@@ -21,18 +21,20 @@ const register = (username, email, password, roles) => {
 };
 
 const login = (username, password) => {
+  
   return axios
     .post(API_URL + "signin", {
       username,
       password,
     })
     .then((response) => {
+        
       if (response.data.username) {
         localStorage.setItem("user", JSON.stringify(response.data));
       }
-
       return response.data;
     });
+    
 };
 
 const logout = () => {

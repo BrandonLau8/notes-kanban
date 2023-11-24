@@ -5,7 +5,8 @@ const User = db.user;
 
 //Is Token provided?
 verifyToken = (req, res, next) => {
-    let token = ["x-access-token"];
+    let token = req.headers["x-access-token"];
+    console.log(req.headers)
 
     if(!token) {
         return res.status(403).send({

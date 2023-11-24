@@ -10,38 +10,38 @@ const bcrypt = require("bcrypt");
 
 exports.signup = (req, res) => {
   //Save User to database
-  console.log(req.body)
+
   User.create({
     username: req.body.username,
     email: req.body.email,
     //complete hashing process before allowing program to move on to the next line
     // salt round of 8
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: bcrypt.hashSync(req.body.password, 8),
   })
 
     //If roles are provided in the request body,
     //find all roles in the database where the name matches any of the roles specified.
-    .then(user => {
-      
+    .then((user) => {
       if (req.body.roles) {
-        
+        const rolesArray = [req.body.roles];
         Role.findAll({
           where: {
             name: {
-              [Op.or]: req.body.roles
-            }
-          }
-          
-        }).then(roles => {
-          console.log(roles)
+              [Op.or]: rolesArray,
+            },
+          },
+        }).then((roles) => {
+          console.log(roles);
           user.setRoles(roles).then(() => {
-            res.send({ message: "User Mod Admin was registered successfully!" });
+            res.send({
+              message: "User Mod Admin was registered successfully!",
+            });
           });
         });
       } else {
         //user has role = 1
         user.setRoles([1]).then(() => {
-        res.send({ message: "User registered successfully!" });
+          res.send({ message: "User registered successfully!" });
         });
       }
     })
@@ -51,6 +51,7 @@ exports.signup = (req, res) => {
 };
 
 exports.signin = (req, res) => {
+  console.log(req.body);
   User.findOne({
     where: {
       username: req.body.username,
@@ -87,10 +88,18 @@ exports.signin = (req, res) => {
       //Layout roles associated with the user
       let authorities = [];
       user.getRoles().then((roles) => {
+        console.log(roles)
         for (let i = 0; i < roles.length; i++) {
           //Uppercase common convention that use Spring Security or similar framework
           authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
+        console.log({
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          roles: authorities,
+          accessToken: token,
+      })
         res.status(200).send({
           id: user.id,
           username: user.username,
