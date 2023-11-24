@@ -20,19 +20,28 @@ const register = (username, email, password, roles) => {
     });
 };
 
-const login = (username, password) => {
-  
-  return axios
+const login = async (username, password) => {
+  return await axios
     .post(API_URL + "signin", {
       username,
       password,
+    }, {
+        headers: {
+            'Content-Type': 'application/json',
+        }
     })
     .then((response) => {
         
       if (response.data.username) {
         localStorage.setItem("user", JSON.stringify(response.data));
       }
-      return response.data;
+      if(response.data.accessToken) {
+        const accessToken = response.data.accessToken;
+        axios.defaults.headers.common['x-access-token'] = accessToken;
+        localStorage.setItem('accessToken', accessToken);
+        console.log('Axios Default Headers:', axios.defaults.headers);
+      }
+      return (response.data);
     });
     
 };

@@ -43,10 +43,11 @@ const Login = () => {
   //
   const handleLogin = async (data) => {
     try {
+      console.log(data)
       await AuthService.login(data.username, data.password);
       navigate("/profile");
-      //Force page to reload may not be neccessary
-      window.location.reload();
+      //Force page to reload may not be neccessary but it makes nav change
+      // await window.location.reload();
     } catch (error) {
       //This approach provides a flexible way to handle errors 
       //with different structures and ensures that you have a 

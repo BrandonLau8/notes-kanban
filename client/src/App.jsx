@@ -29,6 +29,11 @@ const App = () => {
       setCurrentUser(user);
       setShowModeratorBoard(user.roles.includes("ROLE_MODERATOR"));
       setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
+    }  else {
+      // User is not authenticated, handle accordingly
+      setCurrentUser(undefined);
+      setShowModeratorBoard(false);
+      setShowAdminBoard(false);
     }
 
     EventBus.on("logout", () => {
@@ -38,7 +43,7 @@ const App = () => {
     return () => {
       EventBus.remove("logout");
     };
-  }, []);
+  }, [AuthService, setCurrentUser]);
 
   const logOut = () => {
     AuthService.logout();
