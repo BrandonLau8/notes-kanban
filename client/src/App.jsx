@@ -23,7 +23,10 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState(undefined);
 
   useEffect(() => {
-    const user = AuthService.getCurrentUser();
+    console.log("Executing useEffect");
+    const fetchData = async () => {
+      try{
+    const user = await AuthService.getCurrentUser();
 
     if (user) {
       setCurrentUser(user);
@@ -43,7 +46,13 @@ const App = () => {
     return () => {
       EventBus.remove("logout");
     };
-  }, [AuthService, setCurrentUser]);
+  } 
+    catch (error) {
+      console.error("Error fetching user data:", error);
+  }
+  }
+  fetchData();
+  }, [AuthService, setCurrentUser, setShowAdminBoard, setShowModeratorBoard]);
 
   const logOut = () => {
     AuthService.logout();
