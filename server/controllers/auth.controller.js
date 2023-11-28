@@ -88,18 +88,11 @@ exports.signin = (req, res) => {
       //Layout roles associated with the user
       let authorities = [];
       user.getRoles().then((roles) => {
-        console.log(roles)
+        console.log(roles);
         for (let i = 0; i < roles.length; i++) {
           //Uppercase common convention that use Spring Security or similar framework
           authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
-        console.log({
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          roles: authorities,
-          accessToken: token,
-      })
         res.status(200).send({
           id: user.id,
           username: user.username,

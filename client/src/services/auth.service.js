@@ -39,7 +39,6 @@ const login = async (username, password) => {
         const accessToken = response.data.accessToken;
         axios.defaults.headers.common['x-access-token'] = accessToken;
         localStorage.setItem('accessToken', accessToken);
-        console.log('Axios Default Headers:', axios.defaults.headers);
       }
       return (response.data);
     });

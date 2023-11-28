@@ -8,12 +8,15 @@ const db = require("./models");
 const port = process.env.PORT;
 
 //Middleware
-app.use(cors());
+app.use(cors({
+  allowedHeaders:['x-access-token', 'Origin', 'Content-Type', 'Accept']
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 require("./routes/auth.routes")(app);
 require("./routes/user.routes")(app);
+require("./routes/crud.routes")(app);
 
 //Stored on client side
 app.use(
@@ -37,22 +40,6 @@ db.sequelize.sync({ force: true }).then(() => {
   console.log("Drop and Resync DB");
   initial();
 });
-
-// //Write something on the root page
-// app.get("/", (req, res) => {
-//   res.json({ message: "Welcome to my app" });
-// });
-
-// app.get("/api/roles", async (req, res) => {
-//   try {
-//     const roles = await Role.findAll();
-//     const roleNames = roles.map((role) => role.name);
-//     res.json({ roles: roleNames });
-//   } catch (error) {
-//     console.error("Error fetching roles:", error.message);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
 
 //Create roles
 const Role = db.role; //Connect to db index connected to role.model
