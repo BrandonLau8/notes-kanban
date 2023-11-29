@@ -9,9 +9,11 @@ module.exports = function (app) {
     next();
   });
 
-  app.route("/boxes")
-    .get(controller.getBoxes)
-    .post(controller.createBox)
-    .patch(controller.updateBoxes)
-    .delete(controller.deleteBoxes)
+  app.post('/box', controller.createBox)
+
+  app.get('/box/:username', controller.getBoxes)
+
+  app.put('/box/:username', controller.updateBoxes)
+
+  app.delete('/box/:username', controller.deleteBoxes)
 };

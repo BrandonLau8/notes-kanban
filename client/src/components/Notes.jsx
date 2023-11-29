@@ -18,7 +18,7 @@ const Notes = () => {
     };
   
     const getBox = () => {
-      axios.get("http://localhost:3001/boxes").then((response) => {
+      axios.get("http://localhost:3001/box/:username").then((response) => {
         setBox(response.data);
       });
     };
@@ -29,7 +29,7 @@ const Notes = () => {
         const newBox = { input: input, key: box.length, content: "" };
   
         axios
-          .post("http://localhost:3001/create", {
+          .post("http://localhost:3001/box", {
             input: input,
           })
           .then(() => {
