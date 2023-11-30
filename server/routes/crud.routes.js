@@ -11,7 +11,7 @@ module.exports = function (app) {
 
   app.post('/box', controller.createBox)
 
-  app.get('/box/:username', controller.getBoxes)
+  app.get("/box/:username", controller.getBoxes)
 
   app.put('/box/:username', controller.updateBoxes)
 

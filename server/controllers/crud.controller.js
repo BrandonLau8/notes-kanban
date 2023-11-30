@@ -3,54 +3,49 @@ const Crud = db.crud; // id, input, content
 
 exports.createBox = async (req, res) => {
   const data = req.body;
-  try{
+  try {
     const note = await Crud.create(data).then((input) => {
-    if (!input) {
-      return res.status(404).send({ message: "No input" });
-    }
-  });
-
-  if (note) {
+      if (!input) {
+        return res.status(404).send({ message: "No input" });
+      }
+    });
     return res.status(201).json({ message: "New Note Created" });
-  }
-  else {
+  } catch (err) {
+    console.error(err);
     return res.status(400).json({ message: "Invalid note data received" });
   }
-} catch (err) {
-  res.send(err)
-}
-  }
-  
+};
 
 exports.getBoxes = (req, res) => {
   Crud.findAll({
     where: {
-      input: req.body.input,
-      content: req.body.content,
+      username: req.params.username,
     },
   }).then((content) => {
     if (!content?.length) {
-      res.status(400).send({ message: "No content" });
+      return res.status(400).send({ message: "No content" });
     }
-  });
-  res.json(req.body);
+    res.status(200).json({content});
+  }).catch((err) => {
+    console.error('Error retrieving boxes:', err);
+    return res.status(500).json({ message: "Internal server error" });
+  })
 };
 
 exports.updateBoxes = async (req, res) => {
   const username = req.params.username;
   const data = req.body;
-  
+
   try {
     const note = await Crud.update(data, {
       where: {
-        username
-      }
+        username,
+      },
     });
-    res.status(200).send({message: 'note updated'})
+    res.status(200).send({ message: "note updated" });
   } catch (err) {
-    res.status(400).send(err)
+    res.status(400).send(err);
   }
-  
 };
 
 exports.deleteBoxes = async (req, res) => {
@@ -66,4 +61,3 @@ exports.deleteBoxes = async (req, res) => {
     res.status(404).json({ message: "Not not found" });
   }
 };
-
