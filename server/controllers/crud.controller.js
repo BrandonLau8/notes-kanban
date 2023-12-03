@@ -2,9 +2,14 @@ const db = require("../models");
 const Crud = db.crud; // id, input, content
 
 exports.createBox = async (req, res) => {
+  const id = req.params.userId;
   const data = req.body;
   try {
-    const note = await Crud.create(data).then((input) => {
+    const note = await Crud.create(data, {
+      where: {
+        id,
+      }
+    }).then((input) => {
       if (!input) {
         return res.status(404).send({ message: "No input" });
       }

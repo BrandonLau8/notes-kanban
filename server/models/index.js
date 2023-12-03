@@ -37,6 +37,10 @@ db.user.belongsToMany(db.role, {
   through: "user_roles"
 });
 
+//One to many association
+db.user.hasMany(db.crud)
+db.crud.belongsTo(db.user)
+
 //Predefined array for roles
 db.ROLES = ["user", "admin", "moderator"];
 
