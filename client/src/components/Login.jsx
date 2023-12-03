@@ -44,8 +44,8 @@ const Login = () => {
   const handleLogin = async (data) => {
     try {
       console.log(data)
-      await AuthService.login(data.username, data.password);
-      navigate("/profile");
+      const user = await AuthService.login(data.username, data.password);
+      navigate(`/profile/${user.id}`);
       //Force page to reload may not be neccessary but it makes nav change
       // await window.location.reload();
     } catch (error) {

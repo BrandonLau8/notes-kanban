@@ -39,7 +39,10 @@ db.user.belongsToMany(db.role, {
 
 //One to many association
 db.user.hasMany(db.crud)
-db.crud.belongsTo(db.user)
+db.crud.belongsTo(db.user, {
+  foreignKey: 'userId',
+  onDelete: 'CASCADE',
+})
 
 //Predefined array for roles
 db.ROLES = ["user", "admin", "moderator"];

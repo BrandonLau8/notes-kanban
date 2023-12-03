@@ -9,11 +9,11 @@ module.exports = function (app) {
     next();
   });
 
-  app.post('/:userId', controller.createBox)
+  app.post('/profile/:userId', controller.createBox)
 
-  app.get("/:username", controller.getBoxes)
+  app.get("/profile/:userId", controller.getBoxes)
 
-  app.patch('/:username/:input', controller.updateBoxes)
+  app.patch('/profile/:userId', controller.updateBoxes)
 
-  app.delete('/:username/:input/:content', controller.deleteBoxes)
+  app.delete('/profile/:userId', controller.deleteBoxes)
 };

@@ -5,10 +5,8 @@ exports.createBox = async (req, res) => {
   const id = req.params.userId;
   const data = req.body;
   try {
-    const note = await Crud.create(data, {
-      where: {
-        id,
-      }
+    const note = await Crud.create({...data, 
+        userId: id,
     }).then((input) => {
       if (!input) {
         return res.status(404).send({ message: "No input" });
@@ -22,9 +20,10 @@ exports.createBox = async (req, res) => {
 };
 
 exports.getBoxes = (req, res) => {
+  const id = req.params.userId
   Crud.findAll({
     where: {
-      username: req.params.username,
+      id,
     },
   }).then((content) => {
     if (!content?.length) {
@@ -38,13 +37,13 @@ exports.getBoxes = (req, res) => {
 };
 
 exports.updateBoxes = async (req, res) => {
-  const username = req.params.username;
+  const id = req.params.userId
   const data = req.body;
 
   try {
     const note = await Crud.update(data, {
       where: {
-        username,
+        id,
       },
     });
     res.status(200).send({ message: "note updated" });
@@ -54,11 +53,12 @@ exports.updateBoxes = async (req, res) => {
 };
 
 exports.deleteBoxes = async (req, res) => {
-  const username = req.params.username;
+  const input = req.params.input;
+  const data = req.body
   try {
-    await Crud.destroy({
+    await Crud.destroy(data, {
       where: {
-        username,
+        input,
       },
     });
     res.status(200).json({ message: "Note deleted" });

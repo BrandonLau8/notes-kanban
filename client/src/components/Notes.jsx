@@ -1,72 +1,74 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import AuthService from "../services/auth.service";
+
+// const API_URL = "http://localhost:3001/profile/";
 
 const Notes = () => {
-    const storedData = localStorage.getItem("data");
-    const [box, setBox] = useState(JSON.parse(storedData) || []);
-    const [input, setInput] = useState("");
-  
-    const saveBox = (item) => {
-      axios
-        .put("http://localhost:3001/update", {
-          content: item.content,
-          input: item.input,
-        })
-        .then((response) => {
-          alert("update");
-        });
-    };
-  
-    const getBox = () => {
-      axios.get("http://localhost:3001/box/:username").then((response) => {
-        setBox(response.data);
+  const currentUser = AuthService.getCurrentUser();
+  // const storedData = localStorage.getItem("data");
+  // const [box, setBox] = useState(JSON.parse(storedData) || []);
+  const [box, setBox] = useState([]);
+  const [input, setInput] = useState("");
+
+  const saveBox = (item) => {
+    axios
+      .put(`http://localhost:3001/profile/${currentUser.id}`, {
+        content: item.content,
+        input: item.input,
+      })
+      .then((response) => {
+        alert("update");
       });
-    };
-  
-    const handleAddBox = (e) => {
-      e.preventDefault();
-      if (input) {
-        const newBox = { input: input, key: box.length, content: "" };
-  
-        axios
-          .post("http://localhost:3001/box", {
-            input: input,
-          })
-          .then(() => {
-            setBox((prevBox) => [...prevBox, newBox]);
-            setInput("");
-          });
-      }
-    };
-  
-    const handleDeleteBox = (item) => {
-      const boxes = [...box];
+  };
+
+  const getBox = () => {
+    axios.get(`http://localhost:3001/profile/${currentUser.id}`).then((response) => {
+      setBox(response.data);
+    });
+  };
+
+  const handleAddBox = (e) => {
+    e.preventDefault();
+    if (input) {
+      const newBox = { input: input, key: box.length, content: "" };
+
       axios
-        .delete(`http://localhost:3001/delete/${item.input}`, {
-          data: { input: item.input },
+        .post(`http://localhost:3001/profile/${currentUser.id}`, {
+          input: input,
         })
         .then(() => {
-          setBox(
-            boxes.filter((val) => {
-              return val.input != item.input;
-            })
-          );
+          setBox((prevBox) => [...prevBox, newBox]);
+          setInput("");
         });
-    };
-  
-    const handleBoxChange = (index, value) => {
-      const updatedBoxes = [...box];
-      updatedBoxes[index].content = value;
-      setBox(updatedBoxes);
-    };
-  
-    const changeInput = (e) => {
-      setInput(e.target.value);
-    };
-  
-    useEffect(() => {
-      localStorage.setItem("data", JSON.stringify(box));
-    }, [box]);
+    }
+  };
+
+  const handleDeleteBox = (item) => {
+    const updatedBox = box.filter((val) => val.input !== item.input)
+    axios
+      .delete(`http://localhost:3001/profile/${currentUser.id}`, {
+        data: {input: item.input},
+      })
+      .then(() => {
+        setBox(updatedBox);
+      });
+  };
+
+  const handleBoxChange = (index, value) => {
+    const updatedBoxes = [...box];
+    updatedBoxes[index].content = value;
+    setBox(updatedBoxes);
+  };
+
+  const changeInput = (e) => {
+    setInput(e.target.value);
+  };
+
+  useEffect(() => {
+    getBox();
+    // localStorage.setItem("data", JSON.stringify(box));
+  }, []);
   return (
     <>
       <button onClick={handleAddBox}>Add TextArea</button>
@@ -105,7 +107,7 @@ const Notes = () => {
         ))}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Notes
+export default Notes;

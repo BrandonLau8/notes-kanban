@@ -1,8 +1,10 @@
 import React from "react";
 import AuthService from "../services/auth.service";
 import Notes from "./Notes";
+import { useParams } from "react-router-dom";
 
 const Profile = () => {
+  
   const currentUser = AuthService.getCurrentUser(); 
 
   return (
