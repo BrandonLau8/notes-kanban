@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AuthService from "../services/auth.service";
+import useAutosave from "./useAutosave";
 
 // const API_URL = "http://localhost:3001/profile/";
 
@@ -9,22 +10,20 @@ const Notes = () => {
   const storedData = localStorage.getItem("data");
   const [box, setBox] = useState(JSON.parse(storedData) || []);
   const [input, setInput] = useState("");
+  const [content, setContent] = useState("");
 
-  const saveBox = (item) => {
-    axios
-      .put(`http://localhost:3001/profile/${currentUser.id}`, {
-        content: item.content,
-        input: item.input,
-      })
-      .then((response) => {
-        alert("update");
-      });
-  };
+  // const updatedBox = (item) => {
+  //   axios
+  //     .put(`http://localhost:3001/profile/${currentUser.id}`, {
+  //       content: item.content,
+  //     }).then(
+
+  //     )
+  // };
 
   const getBox = () => {
     axios
-      .get(`http://localhost:3001/profile/${currentUser.id}`, {
-      })
+      .get(`http://localhost:3001/profile/${currentUser.id}`, {})
       .then((response) => {
         console.log(response.data.content);
         setBox([...response.data.content]);
@@ -51,18 +50,26 @@ const Notes = () => {
     const updatedBox = box.filter((val) => val.input !== item.input);
     axios
       .delete(`http://localhost:3001/profile/${currentUser.id}`, {
-        data: {input: item.input},
+        data: { input: item.input },
       })
       .then(() => {
-        console.log(item.input)
+        console.log(item.input);
         setBox(updatedBox);
       });
   };
 
-  const handleBoxChange = (index, value) => {
-    const updatedBoxes = [...box];
-    updatedBoxes[index].content = value;
-    setBox(updatedBoxes);
+  const handleSave = async () => {
+    const updatedBoxes = box.map((item) => ({
+      input: item.input,
+      content: item.content,
+      id: item.id
+    }));
+    const requestBody = { id: updatedBoxes.id, content: updatedBoxes[0].content };
+    await axios.patch(
+      `http://localhost:3001/profile/${currentUser.id}`, 
+      requestBody
+  );
+    
   };
 
   const changeInput = (e) => {
@@ -72,7 +79,17 @@ const Notes = () => {
   useEffect(() => {
     getBox();
     localStorage.setItem("data", JSON.stringify(box));
+
+    // Cleanup function
+    return () => {
+      localStorage.removeItem("data");
+    };
   }, [currentUser.id]);
+
+  useAutosave(() => {
+    handleSave();
+  }, 60 * 1000);
+
   return (
     <>
       <button onClick={handleAddBox}>Add TextArea</button>
@@ -96,16 +113,32 @@ const Notes = () => {
               <button onClick={() => handleDeleteBox(item)}>
                 Delete TextArea
               </button>
-              <button onClick={() => saveBox(item, item.input)}>
-                Save TextArea
-              </button>
             </div>
 
             <textarea
               rows="10"
               style={{ resize: "none" }}
               value={item.content}
-              onChange={(e) => handleBoxChange(item.key, e.target.value)}
+              onChange={(e) => {
+                const newValue = e.target.value;
+                setBox((prevBox) => {
+                  const updatedBox = [...prevBox];
+                  const index = updatedBox.findIndex(
+                    (boxItem) => boxItem.key === item.key
+                  );
+                  if (index !== -1) {
+                    updatedBox[index].content = newValue;
+                  }
+
+                  return updatedBox;
+                });
+              }}
+              onBlur={() => {
+                // Add a delay to wait for the state update to complete
+                setTimeout(() => {
+                  handleSave();
+                }, 0);
+              }}
             />
           </div>
         ))}

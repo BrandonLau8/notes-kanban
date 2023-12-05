@@ -37,17 +37,21 @@ exports.getBoxes = (req, res) => {
 };
 
 exports.updateBoxes = async (req, res) => {
-  const id = req.params.userId;
-  const data = req.body;
+  const id = req.body.id
+  const {content} = req.body;
+  
 
   try {
-    const note = await Crud.update(data, {
+    const note = await Crud.update({content}, {
       where: {
-        id,
+        id: id,
       },
+      returning: true,
     });
+    console.log(content)
     res.status(200).send({ message: "note updated" });
   } catch (err) {
+    console.error(err)
     res.status(400).send(err);
   }
 };
