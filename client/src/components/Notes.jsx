@@ -62,14 +62,26 @@ const Notes = () => {
     const updatedBoxes = box.map((item) => ({
       input: item.input,
       content: item.content,
-      id: item.id
+      id: item.key +1
     }));
-    const requestBody = { id: updatedBoxes.id, content: updatedBoxes[0].content };
+
+    // const requestBody = { content: updatedBoxes.content, id: updatedBoxes.id };
+    // const updatedBoxesObject = box.reduce((acc, item) => {
+    //   acc[item.key] = {
+    //     input: item.input,
+    //     content: item.content,
+    //     key: item.key,
+    //   };
+    //   return acc;
+    // }, {});
     await axios.patch(
       `http://localhost:3001/profile/${currentUser.id}`, 
-      requestBody
+        updatedBoxes
+      
+      
+      
   );
-    
+  console.log(updatedBoxes)
   };
 
   const changeInput = (e) => {

@@ -37,18 +37,19 @@ exports.getBoxes = (req, res) => {
 };
 
 exports.updateBoxes = async (req, res) => {
-  const id = req.body.id
-  const {content} = req.body;
   
 
   try {
+    const updatedBoxes = req.body
+    for (updatedBox of updatedBoxes) {
+  const {id, content} = updatedBox;
     const note = await Crud.update({content}, {
-      where: {
-        id: id,
-      },
+      where: {id},
       returning: true,
     });
-    console.log(content)
+  }
+    console.log(req.body)
+   
     res.status(200).send({ message: "note updated" });
   } catch (err) {
     console.error(err)
