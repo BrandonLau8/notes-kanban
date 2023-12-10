@@ -59,29 +59,28 @@ const Notes = () => {
   };
 
   const handleSave = async () => {
-    const updatedBoxes = box.map((item) => ({
-      input: item.input,
-      content: item.content,
-      id: item.key +1
-    }));
-
-    // const requestBody = { content: updatedBoxes.content, id: updatedBoxes.id };
-    // const updatedBoxesObject = box.reduce((acc, item) => {
-    //   acc[item.key] = {
-    //     input: item.input,
-    //     content: item.content,
-    //     key: item.key,
-    //   };
-    //   return acc;
-    // }, {});
+    const updatedBoxes = box.map((item) => {
+      let hash = 0;
+      const content = item.content
+      for (let i=0; i<content.length; i++) {
+        const char = content.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      
+      console.log(hash)
+      return {
+        input: item.input,
+        content: item.content,
+        id: hash,
+        
+      };
+    });
     await axios.patch(
-      `http://localhost:3001/profile/${currentUser.id}`, 
-        updatedBoxes
-      
-      
-      
-  );
-  console.log(updatedBoxes)
+      `http://localhost:3001/profile/${currentUser.id}`,
+      updatedBoxes
+    );
+    console.log(updatedBoxes);
   };
 
   const changeInput = (e) => {

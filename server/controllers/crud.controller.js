@@ -45,7 +45,7 @@ exports.updateBoxes = async (req, res) => {
   const {id, content} = updatedBox;
     const note = await Crud.update({content}, {
       where: {id},
-      returning: true,
+      
     });
   }
     console.log(req.body)
