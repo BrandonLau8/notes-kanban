@@ -2,10 +2,12 @@ const db = require("../models");
 const Crud = db.crud; // id, input, content
 
 exports.createBox = async (req, res) => {
-  const id = req.params.userId;
+  const userId = req.params.userId;
   const data = req.body;
+  const customId = req.body.id
+  console.log(req.body.id)
   try {
-    const note = await Crud.create({ ...data, userId: id }).then((input) => {
+    const note = await Crud.create({ ...data, userId: userId, id: customId }).then((input) => {
       if (!input) {
         return res.status(404).send({ message: "No input" });
       }
@@ -37,22 +39,22 @@ exports.getBoxes = (req, res) => {
 };
 
 exports.updateBoxes = async (req, res) => {
-  
-
   try {
-    const updatedBoxes = req.body
+    const updatedBoxes = req.body;
     for (updatedBox of updatedBoxes) {
-  const {id, content} = updatedBox;
-    const note = await Crud.update({content}, {
-      where: {id},
-      
-    });
-  }
-    console.log(req.body)
-   
+      const { id, content } = updatedBox;
+      const note = await Crud.update(
+        { content },
+        {
+          where: { id },
+        }
+      );
+    }
+    console.log(req.body);
+
     res.status(200).send({ message: "note updated" });
   } catch (err) {
-    console.error(err)
+    console.error(err);
     res.status(400).send(err);
   }
 };

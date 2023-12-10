@@ -12,15 +12,6 @@ const Notes = () => {
   const [input, setInput] = useState("");
   const [content, setContent] = useState("");
 
-  // const updatedBox = (item) => {
-  //   axios
-  //     .put(`http://localhost:3001/profile/${currentUser.id}`, {
-  //       content: item.content,
-  //     }).then(
-
-  //     )
-  // };
-
   const getBox = () => {
     axios
       .get(`http://localhost:3001/profile/${currentUser.id}`, {})
@@ -32,17 +23,34 @@ const Notes = () => {
 
   const handleAddBox = (e) => {
     e.preventDefault();
+
+    let hash = 0;
+
     if (input) {
-      const newBox = { input: input, key: box.length, content: "" };
+      for (let i = 0; i < input.length; i++) {
+        const char = input.charCodeAt(i);
+        hash = (hash << 5) - hash + char;
+        hash = hash | 0;
+      }
+      const hashString = hash.toString();
+      console.log(hash);
+      const newBox = { id: hashString, input: input, content: "" };
 
       axios
         .post(`http://localhost:3001/profile/${currentUser.id}`, {
           input: input,
+          id: hashString,
         })
         .then(() => {
           setBox((prevBox) => [...prevBox, newBox]);
           setInput("");
         });
+      console.log(newBox);
+      return {
+        input: input,
+        content: '',
+        id: hashString,
+      };
     }
   };
 
@@ -61,19 +69,19 @@ const Notes = () => {
   const handleSave = async () => {
     const updatedBoxes = box.map((item) => {
       let hash = 0;
-      const content = item.content
-      for (let i=0; i<content.length; i++) {
-        const char = content.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash;
+      const input = item.input;
+
+      for (let i = 0; i < input.length; i++) {
+        const char = input.charCodeAt(i);
+        hash = (hash << 5) - hash + char;
+        hash = hash | 0;
       }
-      
-      console.log(hash)
+      const hashString = hash.toString();
+      console.log(hash);
       return {
         input: item.input,
         content: item.content,
-        id: hash,
-        
+        id: hashString,
       };
     });
     await axios.patch(
@@ -81,6 +89,7 @@ const Notes = () => {
       updatedBoxes
     );
     console.log(updatedBoxes);
+
   };
 
   const changeInput = (e) => {
@@ -116,7 +125,7 @@ const Notes = () => {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
         {box.map((item) => (
           <div
-            key={item.key}
+            key={item.id}
             style={{ display: "grid", gridTemplateRows: "1fr" }}
           >
             <div>
@@ -135,12 +144,12 @@ const Notes = () => {
                 setBox((prevBox) => {
                   const updatedBox = [...prevBox];
                   const index = updatedBox.findIndex(
-                    (boxItem) => boxItem.key === item.key
+                    (boxItem) => boxItem.id === item.id
                   );
                   if (index !== -1) {
                     updatedBox[index].content = newValue;
                   }
-
+                  
                   return updatedBox;
                 });
               }}
