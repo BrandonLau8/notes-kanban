@@ -53,7 +53,8 @@ const logout = () => {
 };
 
 const getCurrentUser = () => {
-  return JSON.parse(localStorage.getItem("user"));
+  const userData = localStorage.getItem("user");
+  return userData ? JSON.parse(userData) : null;
 };
 
 const AuthService = {
