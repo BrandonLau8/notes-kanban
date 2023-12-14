@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Crud from "./Crud";
 
 
-const Notes = () => {
+const Boxes = () => {
   const {
     getBox,
     handleAddBox,
@@ -71,4 +71,4 @@ const Notes = () => {
   );
 };
 
-export default Notes;
+export default Boxes;
