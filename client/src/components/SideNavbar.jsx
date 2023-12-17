@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../SideNavbar.css";
 import Crud from "./Crud";
+import Notes from "./Notes";
 
 const SideNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState("50px");
+  const [mainMargin, setMainMargin] = useState("0");
 
   const {
+    currentUser,
     getBox,
     handleAddBox,
     handleDeleteBox,
@@ -16,20 +20,23 @@ const SideNavbar = () => {
     setBox,
     input,
     setInput,
-    note,
-    setNote,
   } = Crud();
 
+  const { note, setNote, noteInput, handleAddNote, changeNoteInput } = Notes();
+
+  useEffect(() => {
+    getBox();
+  }, [isOpen]);
+
   const openNav = () => {
-    document.getElementById("mySidebar").style.width = "250px";
-    document.getElementById("main").style.marginLeft = "250px";
+    setSidebarWidth("250px");
+    setMainMargin("250px");
     setIsOpen(true);
-    
   };
 
   function closeNav() {
-    document.getElementById("mySidebar").style.width = "50px";
-    document.getElementById("main").style.marginLeft = "0";
+    setSidebarWidth("50px");
+    setMainMargin("0");
     setIsOpen(false);
   }
 
@@ -45,32 +52,25 @@ const SideNavbar = () => {
     }
   }
 
-  // function addNote() {
-  //   const newNote = { index: note.length, item: `Note ${note.length+1}` };
-  //   setNote((prevNote) => [...prevNote, newNote]);
-  //   console.log(note)
-  // }
-
   return (
     <>
-      <div id="mySidebar" className="sidebar">
+      <div id="mySidebar" className="sidebar" style={{ width: sidebarWidth }}>
         <div className="burger" id="burger-container" onClick={myFunction}>
           <div className="bar1"></div>
           <div className="bar2"></div>
           <div className="bar3"></div>
         </div>
 
-        {/* <button onClick={addNote}>Add Note</button> */}
-
         {isOpen ? (
           <div>
             {note.map((item) => (
-              <div  key={item.id}>
-                <div style={{ color: "white" }}>
-                  <div>
-                    <label>{item.input}</label>
-                    </div>
-                  </div>
+              <div key={item.id}>
+                <Link
+                  to={`/profile/${currentUser.id}/${noteInput}`}
+                  style={{ color: "white" }}
+                >
+                  {item.input}
+                </Link>
               </div>
             ))}
           </div>

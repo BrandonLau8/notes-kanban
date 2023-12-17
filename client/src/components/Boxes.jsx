@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Crud from "./Crud";
-
+import Notes from "./Notes";
 
 const Boxes = () => {
   const {
@@ -13,18 +13,35 @@ const Boxes = () => {
     setBox,
     input,
     setInput,
-  } = Crud()
+  } = Crud();
+
+  const { note, noteInput, setNoteInput, changeNoteInput, handleAddNote } = Notes();
+
   return (
     <>
-      <button onClick={handleAddBox}>Add TextArea</button>
-      <button onClick={getBox}>Show Text Areas</button>
-
       <input
         type="text"
-        value={input}
-        placeholder="what you want"
-        onChange={changeInput}
+        value={noteInput}
+        placeholder="Profile Header"
+        onChange={changeNoteInput}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleAddNote();
+            console.log(noteInput);
+          }
+        }}
       />
+
+      <div>
+        <button onClick={handleAddBox}>Add TextArea</button>
+
+        <input
+          type="text"
+          value={input}
+          placeholder="what you want"
+          onChange={changeInput}
+        />
+      </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
         {box.map((item) => (

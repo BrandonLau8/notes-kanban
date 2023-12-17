@@ -1,5 +1,5 @@
 import React from "react";
-import Notes from "./Notes";
+import Boxes from "./Boxes";
 import SideNavbar from "./SideNavbar";
 import ProfileHeader from "./ProfileHeader";
 
@@ -10,7 +10,7 @@ const Profile = () => {
     <>
       <SideNavbar />
       <ProfileHeader />
-      <Notes />
+      <Boxes />
     </>
   );
 };

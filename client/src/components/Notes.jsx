@@ -1,74 +1,37 @@
 import React, { useState, useEffect } from "react";
-import Crud from "./Crud";
-
+import axios from "axios";
+import AuthService from "../services/auth.service";
+import useAutosave from "./useAutosave";
 
 const Notes = () => {
-  const {
-    getBox,
-    handleAddBox,
-    handleDeleteBox,
-    handleSave,
-    changeInput,
-    box,
-    setBox,
-    input,
-    setInput,
-  } = Crud()
-  return (
-    <>
-      <button onClick={handleAddBox}>Add TextArea</button>
-      <button onClick={getBox}>Show Text Areas</button>
+    const [note, setNote] = useState([]);
+    const [noteInput, setNoteInput] = useState("");
 
-      <input
-        type="text"
-        value={input}
-        placeholder="what you want"
-        onChange={changeInput}
-      />
+    const handleAddNote = (e) => {
+        e.preventDefault();
+        const newNote = { noteInput: noteInput };
+        axios
+          .post(`http://localhost:3001/profile/${currentUser.id}/${noteInput}`, {
+            noteInput: noteInput,
+          })
+          .then(() => {
+            setNote((prevNote) => [...prevNote, newNote]);
+            setNoteInput("");
+          });
+      };
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
-        {box.map((item) => (
-          <div
-            key={item.id}
-            style={{ display: "grid", gridTemplateRows: "1fr" }}
-          >
-            <div>
-              <label>{item.input}</label>
-              <button onClick={() => handleDeleteBox(item)}>
-                Delete TextArea
-              </button>
-            </div>
+      const changeNoteInput = (e) => {
+        setNoteInput(e.target.value);
+      };
 
-            <textarea
-              rows="10"
-              style={{ resize: "none" }}
-              value={item.content}
-              onChange={(e) => {
-                const newValue = e.target.value;
-                setBox((prevBox) => {
-                  const updatedBox = [...prevBox];
-                  const index = updatedBox.findIndex(
-                    (boxItem) => boxItem.id === item.id
-                  );
-                  if (index !== -1) {
-                    updatedBox[index].content = newValue;
-                  }
+  return {
+    note,
+    setNote,
+    noteInput,
+    setNoteInput,
+    handleAddNote,
+    changeNoteInput,
+  }
+}
 
-                  return updatedBox;
-                });
-              }}
-              onBlur={() => {
-                // Add a delay to wait for the state update to complete
-                setTimeout(() => {
-                  handleSave();
-                }, 0);
-              }}
-            />
-          </div>
-        ))}
-      </div>
-    </>
-  );
-};
-
-export default Notes;
+export default Notes

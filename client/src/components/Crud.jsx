@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AuthService from "../services/auth.service";
 import useAutosave from "./useAutosave";
+import Notes from "./Notes";
 
 const Crud = () => {
   const currentUser = AuthService.getCurrentUser();
@@ -9,11 +10,12 @@ const Crud = () => {
   const [box, setBox] = useState(JSON.parse(storedData) || []);
   const [input, setInput] = useState("");
   const [content, setContent] = useState("");
-  const [note, setNote] = useState(JSON.parse(storedData) || []);
+
+  const {noteInput} = Notes();
 
   const getBox = () => {
     axios
-      .get(`http://localhost:3001/profile/${currentUser.id}`, {})
+      .get(`http://localhost:3001/profile/${currentUser.id}/${noteInput}`, {})
       .then((response) => {
         console.log(response.data.content);
         setBox([...response.data.content]);
@@ -34,19 +36,15 @@ const Crud = () => {
       const hashString = hash.toString();
       console.log(hash);
       const newBox = { id: hashString, input: input, content: "" };
-      const newNote = { id: hashString, input: input };
 
       axios
-        .post(`http://localhost:3001/profile/${currentUser.id}`, {
+        .post(`http://localhost:3001/profile/${currentUser.id}/${noteInput}`, {
           input: input,
           id: hashString,
         })
         .then(() => {
           setBox((prevBox) => [...prevBox, newBox]);
-          setNote((prevNote) => [...prevNote, newNote]);
           setInput("");
-          console.log(newBox);
-          console.log(`this is note ${newNote}`);
         });
 
       return {
@@ -59,8 +57,9 @@ const Crud = () => {
 
   const handleDeleteBox = (item) => {
     const updatedBox = box.filter((val) => val.input !== item.input);
+
     axios
-      .delete(`http://localhost:3001/profile/${currentUser.id}`, {
+      .delete(`http://localhost:3001/profile/${currentUser.id}/${noteInput}`, {
         data: { input: item.input },
       })
       .then(() => {
@@ -88,7 +87,7 @@ const Crud = () => {
       };
     });
     await axios.patch(
-      `http://localhost:3001/profile/${currentUser.id}`,
+      `http://localhost:3001/profile/${currentUser.id}/${noteInput}`,
       updatedBoxes
     );
     console.log(updatedBoxes);
@@ -97,6 +96,8 @@ const Crud = () => {
   const changeInput = (e) => {
     setInput(e.target.value);
   };
+
+
 
   useEffect(() => {
     getBox();
@@ -113,6 +114,7 @@ const Crud = () => {
   }, 60 * 1000);
 
   return {
+    currentUser,
     getBox,
     handleAddBox,
     handleDeleteBox,
@@ -124,8 +126,6 @@ const Crud = () => {
     setInput,
     content,
     setContent,
-    note,
-    setNote,
   };
 };
 
