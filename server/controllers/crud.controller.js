@@ -4,10 +4,16 @@ const Crud = db.crud; // id, input, content
 exports.createBox = async (req, res) => {
   const userId = req.params.userId;
   const data = req.body;
-  const customId = req.body.id
-  console.log(req.body.id)
+  const customId = req.body.id;
+  const notesId = req.params.notesId;
+  console.log(req.body.id);
   try {
-    const note = await Crud.create({ ...data, userId: userId, id: customId }).then((input) => {
+    const note = await Crud.create({
+      ...data,
+      userId: userId,
+      id: customId,
+      notesId: notesId,
+    }).then((input) => {
       if (!input) {
         return res.status(404).send({ message: "No input" });
       }
@@ -21,9 +27,11 @@ exports.createBox = async (req, res) => {
 
 exports.getBoxes = (req, res) => {
   const userId = req.params.userId;
+  const notesId = req.params.notesId;
   Crud.findAll({
     where: {
       userId,
+      notesId,
     },
   })
     .then((content) => {

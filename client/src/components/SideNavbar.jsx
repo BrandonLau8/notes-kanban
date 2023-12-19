@@ -25,9 +25,10 @@ const SideNavbar = () => {
   const { note, setNote, noteInput, handleAddNote, changeNoteInput } = Notes();
 
   useEffect(() => {
-    getBox();
+    setNote()
   }, [isOpen]);
-
+  
+  console.log("SideNavbar - note:", note);
   const openNav = () => {
     setSidebarWidth("250px");
     setMainMargin("250px");
@@ -65,16 +66,18 @@ const SideNavbar = () => {
           <div>
             {note.map((item) => (
               <div key={item.id}>
-                <Link
-                  to={`/profile/${currentUser.id}/${noteInput}`}
+                {/* <Link
+                  to={`/profile/${currentUser.id}/${item.id}`}
                   style={{ color: "white" }}
                 >
                   {item.input}
-                </Link>
+                </Link> */}
+                <div style={{ color: "white" }}>{item.noteInput}</div>
               </div>
             ))}
           </div>
         ) : null}
+
         <div id="main"></div>
       </div>
     </>

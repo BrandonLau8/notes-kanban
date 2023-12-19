@@ -28,6 +28,7 @@ const Boxes = () => {
           if (e.key === "Enter") {
             handleAddNote();
             console.log(noteInput);
+            console.log(note);
           }
         }}
       />

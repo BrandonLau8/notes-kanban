@@ -1,7 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
   const Notes = sequelize.define("notes", {
     id: {
-      type: Sequelize.BIGINT,
+      type: Sequelize.INTEGER,
       primaryKey: true,
       allowNull: false,
     },
@@ -13,4 +13,6 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
   });
+  return Notes
 };
+
