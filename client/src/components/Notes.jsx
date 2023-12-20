@@ -1,39 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import AuthService from "../services/auth.service";
 import useAutosave from "./useAutosave";
 import Crud from "./Crud";
+import { createContext } from "vm";
 
 const Notes = () => {
-    const [note, setNote] = useState([]);
-    const [noteInput, setNoteInput] = useState("");
+  const [note, setNote] = useState([]);
+  const [noteInput, setNoteInput] = useState("");
 
-    const {currentUser} = Crud;
+  const { currentUser } = Crud;
 
-    const getNotes = () => {
-       
-    }
+  const getNotes = () => {};
 
-    const handleAddNote = (e) => {
-        
-        const newNote = { noteInput: noteInput };
-        // axios
-        //   .post(`http://localhost:3001/profile/${currentUser.id}/${noteInput}`, {
-        //     noteInput: noteInput,
-           
-        //   })
-        //   .then(() => {
-        //     setNote((prevNote) => [...prevNote, newNote]);
-        //     setNoteInput("");
-        //   });
-        setNote((prevNote) => [...prevNote, newNote]);
-        setNoteInput("");
-        
-      };
+  const handleAddNote = (e) => {
+    const newNote = { noteInput: noteInput };
+    // axios
+    //   .post(`http://localhost:3001/profile/${currentUser.id}/${noteInput}`, {
+    //     noteInput: noteInput,
 
-      const changeNoteInput = (e) => {
-        setNoteInput(e.target.value);
-      };
+    //   })
+    //   .then(() => {
+    //     setNote((prevNote) => [...prevNote, newNote]);
+    //     setNoteInput("");
+    //   });
+    setNote((prevNote) => [...prevNote, newNote]);
+    setNoteInput("");
+  };
+
+  const changeNoteInput = (e) => {
+    setNoteInput(e.target.value);
+  };
 
   return {
     note,
@@ -42,7 +39,7 @@ const Notes = () => {
     setNoteInput,
     handleAddNote,
     changeNoteInput,
-  }
-}
+  };
+};
 
-export default Notes
+export default Notes;

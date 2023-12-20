@@ -25,7 +25,7 @@ const SideNavbar = () => {
   const { note, setNote, noteInput, handleAddNote, changeNoteInput } = Notes();
 
   useEffect(() => {
-    setNote()
+    getBox()
   }, [isOpen]);
   
   console.log("SideNavbar - note:", note);
