@@ -22,13 +22,14 @@ const SideNavbar = () => {
     setInput,
   } = Crud();
 
-  const { note, setNote, noteInput, handleAddNote, changeNoteInput } = Notes();
+  const { notes, setNotes, noteInput, handleAddNote, changeNoteInput } =
+    Notes();
 
   useEffect(() => {
-    getBox()
+    getBox();
   }, [isOpen]);
-  
-  console.log("SideNavbar - note:", note);
+
+  console.log("SideNavbar - note:", notes);
   const openNav = () => {
     setSidebarWidth("250px");
     setMainMargin("250px");
@@ -64,15 +65,14 @@ const SideNavbar = () => {
 
         {isOpen ? (
           <div>
-            {note.map((item) => (
+            {notes.map((item) => (
               <div key={item.id}>
-                {/* <Link
+                <Link
                   to={`/profile/${currentUser.id}/${item.id}`}
                   style={{ color: "white" }}
                 >
-                  {item.input}
-                </Link> */}
-                <div style={{ color: "white" }}>{item.noteInput}</div>
+                  {item.noteInput}
+                </Link>
               </div>
             ))}
           </div>

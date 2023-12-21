@@ -3,10 +3,11 @@ import axios from "axios";
 import AuthService from "../services/auth.service";
 import useAutosave from "./useAutosave";
 import Crud from "./Crud";
-import { createContext } from "vm";
+import {useNote} from './NoteContext'
+
 
 const Notes = () => {
-  const [note, setNote] = useState([]);
+  const {notes, setNotes} = useNote();
   const [noteInput, setNoteInput] = useState("");
 
   const { currentUser } = Crud;
@@ -24,7 +25,7 @@ const Notes = () => {
     //     setNote((prevNote) => [...prevNote, newNote]);
     //     setNoteInput("");
     //   });
-    setNote((prevNote) => [...prevNote, newNote]);
+    setNotes((prevNote) => [...prevNote, newNote]);
     setNoteInput("");
   };
 
@@ -33,8 +34,8 @@ const Notes = () => {
   };
 
   return {
-    note,
-    setNote,
+    notes,
+    setNotes,
     noteInput,
     setNoteInput,
     handleAddNote,

@@ -15,7 +15,7 @@ const Boxes = () => {
     setInput,
   } = Crud();
 
-  const { note, noteInput, setNoteInput, changeNoteInput, handleAddNote } = Notes();
+  const { notes, noteInput, setNoteInput, changeNoteInput, handleAddNote } = Notes();
 
   return (
     <>
@@ -28,7 +28,7 @@ const Boxes = () => {
           if (e.key === "Enter") {
             handleAddNote();
             console.log(noteInput);
-            console.log(note);
+            console.log(notes);
           }
         }}
       />
