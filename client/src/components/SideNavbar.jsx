@@ -65,10 +65,12 @@ const SideNavbar = () => {
 
         {isOpen ? (
           <div>
+            <Link to={`/profile/${currentUser.id}`}>New Note</Link>
             {notes.map((item) => (
               <div key={item.id}>
+                
                 <Link
-                  to={`/profile/${currentUser.id}/${item.id}`}
+                  to={`/profile/${currentUser.id}/${item.noteInput}`}
                   style={{ color: "white" }}
                 >
                   {item.noteInput}

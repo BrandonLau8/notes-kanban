@@ -15,7 +15,7 @@ const Crud = () => {
 
   const getBox = () => {
     axios
-      .get(`http://localhost:3001/profile/${currentUser.id}/${noteInput}`, {})
+      .get(`http://localhost:3001/profile/${currentUser.id}`, {})
       .then((response) => {
         console.log(response.data.content);
         setBox([...response.data.content]);
@@ -34,32 +34,35 @@ const Crud = () => {
         hash = hash | 0;
       }
       const hashString = hash.toString();
-      console.log(hash);
-      const newBox = { id: hashString, input: input, content: "" };
+      // console.log(hash);
+      // const newBox = {input: input, content: "" };
 
       axios
-        .post(`http://localhost:3001/profile/${currentUser.id}/${noteInput}`, {
+        .post(`http://localhost:3001/profile/${currentUser.id}`, {
           input: input,
-          id: hashString,
+          
         })
-        .then(() => {
+        .then((res) => {
+          console.log(res.data.id)
+          const newBox = {input: input, content: "", id: res.data.id };
           setBox((prevBox) => [...prevBox, newBox]);
           setInput("");
+          
         });
 
       return {
         input: input,
         content: "",
-        id: hashString,
+        
       };
     }
   };
 
   const handleDeleteBox = (item) => {
-    const updatedBox = box.filter((val) => val.input !== item.input);
+    const updatedBox = box.filter((val) => val.id !== item.id);
 
     axios
-      .delete(`http://localhost:3001/profile/${currentUser.id}/${noteInput}`, {
+      .delete(`http://localhost:3001/profile/${currentUser.id}`, {
         data: { input: item.input },
       })
       .then(() => {
@@ -79,15 +82,16 @@ const Crud = () => {
         hash = hash | 0;
       }
       const hashString = hash.toString();
-      console.log(hash);
+      
       return {
-        input: item.input,
+        
         content: item.content,
-        id: hashString,
+        id: item.id
       };
     });
+    console.log(updatedBoxes);
     await axios.patch(
-      `http://localhost:3001/profile/${currentUser.id}/${noteInput}`,
+      `http://localhost:3001/profile/${currentUser.id}`,
       updatedBoxes
     );
     console.log(updatedBoxes);

@@ -47,7 +47,7 @@ const Boxes = () => {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
         {box.map((item) => (
           <div
-            key={item.id}
+            id={item.id}
             style={{ display: "grid", gridTemplateRows: "1fr" }}
           >
             <div>

@@ -6,19 +6,29 @@ exports.createBox = async (req, res) => {
   const data = req.body;
   const customId = req.body.id;
   const notesId = req.params.notesId;
-  console.log(req.body.id);
+  // console.log(req.body.id);
   try {
     const note = await Crud.create({
       ...data,
       userId: userId,
-      id: customId,
-      notesId: notesId,
-    }).then((input) => {
-      if (!input) {
-        return res.status(404).send({ message: "No input" });
-      }
+      // id: customId,
+      // notesId: notesId,
     });
-    return res.status(201).json({ message: "New Note Created" });
+    
+    console.log(note.dataValues.id);
+    if (!note) {
+      return res.status(404).send({ message: "No input" });
+    }
+    
+    const createdNote = {
+      id: note.dataValues.id,
+      message: "New Note Created",
+    };
+
+    console.log(createdNote.id);
+
+    return res.status(201).json(createdNote);
+    
   } catch (err) {
     console.error(err);
     return res.status(400).json({ message: "Invalid note data received" });

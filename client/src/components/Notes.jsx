@@ -26,7 +26,7 @@ const Notes = () => {
     //     setNoteInput("");
     //   });
     setNotes((prevNote) => [...prevNote, newNote]);
-    setNoteInput("");
+    setNoteInput('');
   };
 
   const changeNoteInput = (e) => {

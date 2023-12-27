@@ -6,6 +6,7 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.BIGINT,
         primaryKey: true,
         allowNull: false,
+        autoIncrement: true,
       },
       input: {
         type: Sequelize.STRING,
@@ -13,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
       content: {
         type: Sequelize.STRING,
       },
-      notesId: {
+      userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },

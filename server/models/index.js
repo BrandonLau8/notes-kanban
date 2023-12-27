@@ -24,7 +24,7 @@ db.sequelize = sequelize; //Represents connection to db
 
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
-db.notes = require("../models/notes.model.js")(sequelize, Sequelize);
+// db.notes = require("../models/notes.model.js")(sequelize, Sequelize);
 db.crud = require("../models/crud.model.js")(sequelize, Sequelize);
 
 //Many to many association
@@ -40,14 +40,14 @@ db.user.belongsToMany(db.role, {
 
 //One to many association
 db.user.hasMany(db.crud)
-db.notes.belongsTo(db.user, {
+db.crud.belongsTo(db.user, {
   foreignKey: 'userId'
 })
 
-db.notes.hasMany(db.crud)
-db.crud.belongsTo(db.notes, {
-  foreignKey:'notesId'
-})
+// db.notes.hasMany(db.crud)
+// db.crud.belongsTo(db.notes, {
+//   foreignKey:'notesId'
+// })
 
 //Predefined array for roles
 db.ROLES = ["user", "admin", "moderator"];
