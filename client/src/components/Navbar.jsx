@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = ({ isAuthenticated, showModeratorBoard, showAdminBoard, currentUser, logOut }) => {
-    console.log("isAuthenticated:", isAuthenticated);
-    console.log("showModeratorBoard:", showModeratorBoard);
-    console.log("showAdminBoard:", showAdminBoard);
-    console.log("currentUser:", currentUser);
+    // console.log("isAuthenticated:", isAuthenticated);
+    // console.log("showModeratorBoard:", showModeratorBoard);
+    // console.log("showAdminBoard:", showAdminBoard);
+    // console.log("currentUser:", currentUser);
     return (
     <nav className="navbar navbar-expand navbar-dark bg-dark">
     <Link to={"/"} className="navbar-brand">

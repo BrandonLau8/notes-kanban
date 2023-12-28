@@ -14,10 +14,10 @@ module.exports = (sequelize, Sequelize) => {
       content: {
         type: Sequelize.STRING,
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
+      // notesId: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: false,
+      // },
     },
     
   );

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../SideNavbar.css";
 import Crud from "./Crud";
-import Notes from "./Notes";
+import Notes from "../services/note.service";
 
 const SideNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +29,7 @@ const SideNavbar = () => {
     getBox();
   }, [isOpen]);
 
-  console.log("SideNavbar - note:", notes);
+  // console.log("SideNavbar - note:", notes);
   const openNav = () => {
     setSidebarWidth("250px");
     setMainMargin("250px");
@@ -65,12 +65,12 @@ const SideNavbar = () => {
 
         {isOpen ? (
           <div>
-            <Link to={`/profile/${currentUser.id}`}>New Note</Link>
+            <button onClick={handleAddNote}>New Note</button>
             {notes.map((item) => (
-              <div key={item.id}>
+              <div id={item.id}>
                 
                 <Link
-                  to={`/profile/${currentUser.id}/${item.noteInput}`}
+                  to={`/profile/${currentUser.id}/${item.id}`}
                   style={{ color: "white" }}
                 >
                   {item.noteInput}

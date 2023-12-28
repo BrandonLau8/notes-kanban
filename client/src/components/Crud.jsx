@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AuthService from "../services/auth.service";
 import useAutosave from "./useAutosave";
-import Notes from "./Notes";
+import Notes from "../services/note.service";
 
 const Crud = () => {
   const currentUser = AuthService.getCurrentUser();
@@ -11,7 +11,7 @@ const Crud = () => {
   const [input, setInput] = useState("");
   const [content, setContent] = useState("");
 
-  const {noteInput} = Notes();
+  const { noteInput } = Notes();
 
   const getBox = () => {
     axios
@@ -24,38 +24,21 @@ const Crud = () => {
 
   const handleAddBox = (e) => {
     e.preventDefault();
-
-    let hash = 0;
-
-    if (input) {
-      for (let i = 0; i < input.length; i++) {
-        const char = input.charCodeAt(i);
-        hash = (hash << 5) - hash + char;
-        hash = hash | 0;
-      }
-      const hashString = hash.toString();
-      // console.log(hash);
-      // const newBox = {input: input, content: "" };
-
-      axios
-        .post(`http://localhost:3001/profile/${currentUser.id}`, {
-          input: input,
-          
-        })
-        .then((res) => {
-          console.log(res.data.id)
-          const newBox = {input: input, content: "", id: res.data.id };
-          setBox((prevBox) => [...prevBox, newBox]);
-          setInput("");
-          
-        });
-
-      return {
+    axios
+      .post(`http://localhost:3001/profile/${currentUser.id}`, {
         input: input,
-        content: "",
-        
-      };
-    }
+      })
+      .then((res) => {
+        console.log(res.data.id);
+        const newBox = { input: input, content: "", id: res.data.id };
+        setBox((prevBox) => [...prevBox, newBox]);
+        setInput("");
+      });
+
+    return {
+      input: input,
+      content: "",
+    };
   };
 
   const handleDeleteBox = (item) => {
@@ -73,20 +56,9 @@ const Crud = () => {
 
   const handleSave = async () => {
     const updatedBoxes = box.map((item) => {
-      let hash = 0;
-      const input = item.input;
-
-      for (let i = 0; i < input.length; i++) {
-        const char = input.charCodeAt(i);
-        hash = (hash << 5) - hash + char;
-        hash = hash | 0;
-      }
-      const hashString = hash.toString();
-      
       return {
-        
         content: item.content,
-        id: item.id
+        id: item.id,
       };
     });
     console.log(updatedBoxes);
@@ -101,13 +73,11 @@ const Crud = () => {
     setInput(e.target.value);
   };
 
-
-
   useEffect(() => {
     getBox();
     localStorage.setItem("data", JSON.stringify(box));
 
-    // Cleanup function
+    //Cleanup function
     return () => {
       localStorage.removeItem("data");
     };

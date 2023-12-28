@@ -2,20 +2,16 @@ const db = require("../models");
 const Crud = db.crud; // id, input, content
 
 exports.createBox = async (req, res) => {
-  const userId = req.params.userId;
+  // const notesId = req.params.notesId;
   const data = req.body;
-  const customId = req.body.id;
-  const notesId = req.params.notesId;
-  // console.log(req.body.id);
+  
   try {
     const note = await Crud.create({
       ...data,
-      userId: userId,
-      // id: customId,
       // notesId: notesId,
     });
     
-    console.log(note.dataValues.id);
+    // console.log(note.dataValues.id);
     if (!note) {
       return res.status(404).send({ message: "No input" });
     }
@@ -25,7 +21,7 @@ exports.createBox = async (req, res) => {
       message: "New Note Created",
     };
 
-    console.log(createdNote.id);
+    // console.log(createdNote.id);
 
     return res.status(201).json(createdNote);
     
@@ -36,12 +32,12 @@ exports.createBox = async (req, res) => {
 };
 
 exports.getBoxes = (req, res) => {
-  const userId = req.params.userId;
-  const notesId = req.params.notesId;
+  // const userId = req.params.userId;
+  // const notesId = req.params.notesId;
   Crud.findAll({
     where: {
-      userId,
-      notesId,
+      // userId,
+      // notesId,
     },
   })
     .then((content) => {

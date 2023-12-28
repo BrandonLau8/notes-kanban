@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Crud from "./Crud";
-import Notes from "./Notes";
+import NoteService from "../services/note.service";
 
 const Boxes = () => {
   const {
@@ -15,23 +15,37 @@ const Boxes = () => {
     setInput,
   } = Crud();
 
-  const { notes, noteInput, setNoteInput, changeNoteInput, handleAddNote } = Notes();
+  const { notes, noteInput, setNoteInput, changeNoteInput, handleAddNote } =
+    NoteService();
 
+    const [isEditing, setIsEditing] = useState(true);
+
+    const toggleEditMode = () => {
+      setIsEditing(!isEditing);
+    };
   return (
     <>
-      <input
-        type="text"
-        value={noteInput}
-        placeholder="Profile Header"
-        onChange={changeNoteInput}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            handleAddNote();
-            console.log(noteInput);
-            console.log(notes);
-          }
-        }}
-      />
+      <div>
+      {isEditing ? (
+        <input
+          type="text"
+          value={noteInput}
+          placeholder="Profile Header"
+          onChange={changeNoteInput}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleAddNote();
+              toggleEditMode();
+            }
+          }}
+        />
+      ) : (
+        <div onClick={toggleEditMode}>
+          <strong>{noteInput}</strong>
+        </div>
+      )}
+    </div>
+      
 
       <div>
         <button onClick={handleAddBox}>Add TextArea</button>

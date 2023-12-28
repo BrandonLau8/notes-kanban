@@ -1,4 +1,5 @@
 const controller = require("../controllers/crud.controller");
+const notesControl = require('../controllers/notes.controller')
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
@@ -10,11 +11,14 @@ module.exports = function (app) {
   });
 
   
-  app.post('/profile/:userId', controller.createBox)
+  // app.post('/profile/:userId', controller.createBox)
 
   app.get('/profile/:userId', controller.getBoxes)
 
   app.patch('/profile/:userId', controller.updateBoxes)
 
   app.delete('/profile/:userId', controller.deleteBoxes)
+
+  app.post('/profile/:userId', notesControl.createNote)
+
 };

@@ -51,18 +51,6 @@ const Register = () => {
   const [message, setMessage] = useState("");
   const [roles, setRoles] = useState([]);
 
-  // useEffect(() => {
-  //   const fetchRoles = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:3001/api/roles");
-  //       setRoles(response.data.roles);
-  //     } catch (error) {
-  //       console.error("error fetcching roles:", error.message);
-  //     }
-  //   };
-  //   fetchRoles();
-  // }, []);
-
   const {
     register,
     handleSubmit,
