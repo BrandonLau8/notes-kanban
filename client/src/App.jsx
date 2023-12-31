@@ -90,7 +90,7 @@ const App = () => {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
           <Route path="/profile/:userId" element={<Profile />} />
-          {/* <Route path="/profile/:userId/:notesId" element={<Profile />} /> */}
+          <Route path="/profile/:userId/:notesId" element={<Profile />} />
           <Route path="/user" element={<BoardUser />} />
           <Route path="/mod" element={<BoardModerator />} />
           <Route path="/admin" element={<BoardAdmin />} />

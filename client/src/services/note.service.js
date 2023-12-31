@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthService from "./auth.service";
 import useAutosave from "../components/useAutosave";
@@ -10,6 +11,7 @@ const NoteService = () => {
   const [noteInput, setNoteInput] = useState("");
   const currentUser = AuthService.getCurrentUser();
   const API_URL = `http://localhost:3001/profile/${currentUser.id}`;
+  const navigate = useNavigate();
 
   const getNotes = () => {};
 
@@ -20,10 +22,14 @@ const NoteService = () => {
       })
       .then((res) => {
         // console.log("createNotedata:", res.data.id);
-        const newNote = {id: res.data.id, noteInput: noteInput };
+        const newNote = {
+          id: res.data.id, 
+          noteInput: 
+            noteInput !== '' ? noteInput : 'New Note' };
         setNotes((prevNote) => [...prevNote, newNote]);
-        console.log(notes)
-      })
+        navigate(`/profile/${currentUser.id}/${newNote.id}`)
+        console.log(newNote.id)
+      })  
       .catch((error) => {
         console.error("Error adding note:", error);
       });

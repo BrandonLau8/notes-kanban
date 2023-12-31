@@ -67,11 +67,12 @@ const SideNavbar = () => {
           <div>
             <button onClick={handleAddNote}>New Note</button>
             {notes.map((item) => (
+              
               <div id={item.id}>
                 
                 <Link
                   to={`/profile/${currentUser.id}/${item.id}`}
-                  style={{ color: "white" }}
+                  style={{ color: "white", backgroundColor:'blue'}}
                 >
                   {item.noteInput}
                 </Link>

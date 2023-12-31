@@ -1,20 +1,21 @@
 import React from "react";
+import { NoteProvider, useNote } from "./NoteContext";
+
 import Boxes from "./Boxes";
 import SideNavbar from "./SideNavbar";
 import ProfileHeader from "./ProfileHeader";
-import { NoteProvider } from "./NoteContext";
 
 const Profile = () => {
   
 
   return (
-    <NoteProvider>
     <>
-      <SideNavbar/>
-      <ProfileHeader />
-      <Boxes />
+      <NoteProvider>
+        <SideNavbar />
+        <ProfileHeader />
+        <Boxes />
+      </NoteProvider>
     </>
-    </NoteProvider>
   );
 };
 
