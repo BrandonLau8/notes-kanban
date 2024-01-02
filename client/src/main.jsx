@@ -5,6 +5,7 @@ import Test from "./routes/Test.jsx";
 import ErrorPage from "./routes/error-page.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
+import { NoteProvider } from "./components/NoteContext.jsx";
 
 // import reportWebVitals from './reportWebVitals'
 
@@ -26,7 +27,9 @@ import { BrowserRouter } from "react-router-dom";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
+    <NoteProvider>
     <App />
+    </NoteProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

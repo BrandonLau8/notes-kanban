@@ -19,6 +19,8 @@ module.exports = function (app) {
 
   app.delete('/profile/:userId', controller.deleteBoxes)
 
-  app.post('/profile/:userId', notesControl.createNote)
+  app.post('/profile/:userId', notesControl.createNote, controller.createBox)
+
+  app.patch('/profile/:userId/:notesId', notesControl.updateNotes)
 
 };

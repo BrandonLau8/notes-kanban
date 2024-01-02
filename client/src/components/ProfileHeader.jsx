@@ -1,11 +1,12 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import AuthService from "../services/auth.service";
 import NoteService from "../services/note.service";
+import { Outlet } from "react-router-dom";
 
 const ProfileHeader = () => {
   const currentUser = AuthService.getCurrentUser();
 
-  const { notes, noteInput, setNoteInput, changeNoteInput, handleAddNote } =
+  const { notes, noteInput, setNoteInput, changeNoteInput, handleAddNote, handleNoteSave } =
     NoteService();
 
   const [isEditing, setIsEditing] = useState(true);
@@ -13,6 +14,15 @@ const ProfileHeader = () => {
   const toggleEditMode = () => {
     setIsEditing(!isEditing);
   };
+
+  const updatedNotes = notes.map((item) => {
+    return {
+      id: item.id,
+      noteInput: item.noteInput
+    }
+  });
+ 
+
   return (
     <div className="ml-3">
       <header className="jumbotron">
@@ -31,7 +41,7 @@ const ProfileHeader = () => {
         {currentUser.roles &&
           currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
       </ul>
-      <div>
+      {/* <div>
         {isEditing ? (
           <input
             type="text"
@@ -40,8 +50,10 @@ const ProfileHeader = () => {
             onChange={changeNoteInput}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                handleAddNote();
                 toggleEditMode();
+                setTimeout(() => {
+                  handleNoteSave();
+                }, 0);
               }
             }}
           />
@@ -50,7 +62,9 @@ const ProfileHeader = () => {
             <strong>{noteInput}</strong>
           </div>
         )}
-      </div>
+      </div> */}
+      
+      <strong></strong>
     </div>
   );
 };

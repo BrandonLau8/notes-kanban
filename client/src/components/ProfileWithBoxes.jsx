@@ -1,19 +1,21 @@
 import React from "react";
 
 
+import Boxes from "./Boxes";
 
 import ProfileHeader from "./ProfileHeader";
 import { Outlet } from "react-router-dom";
 
-const Profile = () => {
+const ProfileWithBoxes = () => {
 
   return (
     <>
-    
-      <ProfileHeader />
+      
+        <ProfileHeader />
+        <Boxes />
       <Outlet />
     </>
   );
 };
 
-export default Profile;
+export default ProfileWithBoxes;

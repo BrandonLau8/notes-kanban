@@ -20,7 +20,7 @@ const Boxes = () => {
 
   return (
     <>
-      {notes && notes.length > 0 ? (
+      {/* {notes && notes.length > 0 ? ( */}
         <>
           <div>
             <button onClick={handleAddBox}>Add TextArea</button>
@@ -74,7 +74,7 @@ const Boxes = () => {
             ))}
           </div>
         </>
-      ) : null}
+      {/* ) : null} */}
     </>
   );
 };

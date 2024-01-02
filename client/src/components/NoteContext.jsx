@@ -4,8 +4,9 @@ const NoteContext = createContext();
 
 export const NoteProvider = ({children}) => {
     const [notes, setNotes] = useState([]);
+    const [noteInput, setNoteInput] = useState('');
   return (
-    <NoteContext.Provider value={{notes, setNotes}}>
+    <NoteContext.Provider value={{notes, setNotes, noteInput, setNoteInput}}>
         {children}
     </NoteContext.Provider>
   )

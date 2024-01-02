@@ -11,7 +11,7 @@ const Crud = () => {
   const [input, setInput] = useState("");
   const [content, setContent] = useState("");
 
-  const { noteInput } = Notes();
+  
 
   const getBox = () => {
     axios
