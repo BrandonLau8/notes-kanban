@@ -21,7 +21,6 @@ const NoteService = () => {
         noteInput,
       })
       .then((res) => {
-        // console.log("createNotedata:", res.data.id);
         const newNote = {
           id: res.data.id, 
           noteInput: 
@@ -47,14 +46,13 @@ const NoteService = () => {
         noteInput: item.noteInput
       }
     });
-    const notesIdToUpdate = updatedNotes[0].id;
+   
 
     await axios.patch(
-      `http://localhost:3001/profile/${currentUser.id}/${notesIdToUpdate}`,
+      `http://localhost:3001/profile/${currentUser.id}/${updatedNotes.id}`,
       updatedNotes
     );
-    console.log('NotesId:' + notesIdToUpdate);
-    console.log('UpdatedNotes:' + updatedNotes)
+
   }
 
 

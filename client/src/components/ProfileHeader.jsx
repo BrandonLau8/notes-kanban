@@ -41,7 +41,7 @@ const ProfileHeader = () => {
         {currentUser.roles &&
           currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
       </ul>
-      {/* <div>
+      <div>
         {isEditing ? (
           <input
             type="text"
@@ -59,12 +59,10 @@ const ProfileHeader = () => {
           />
         ) : (
           <div onClick={toggleEditMode}>
-            <strong>{noteInput}</strong>
+            <strong>{noteInput ? noteInput : 'New Note'}</strong>
           </div>
         )}
-      </div> */}
-      
-      <strong></strong>
+      </div>
     </div>
   );
 };

@@ -5,14 +5,10 @@ import Crud from "./Crud";
 import Notes from "../services/note.service";
 import { Outlet } from "react-router-dom";
 
-
-
-
 const SideNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState("50px");
   const [mainMargin, setMainMargin] = useState("0");
-  
 
   const {
     currentUser,
@@ -27,8 +23,14 @@ const SideNavbar = () => {
     setInput,
   } = Crud();
 
-  const { notes, setNotes, noteInput, handleAddNote, changeNoteInput, handleNoteSave } =
-    Notes();
+  const {
+    notes,
+    setNotes,
+    noteInput,
+    handleAddNote,
+    changeNoteInput,
+    handleNoteSave,
+  } = Notes();
 
   useEffect(() => {
     getBox();
@@ -61,7 +63,6 @@ const SideNavbar = () => {
 
   return (
     <>
-    
       <div id="mySidebar" className="sidebar" style={{ width: sidebarWidth }}>
         <div className="burger" id="burger-container" onClick={myFunction}>
           <div className="bar1"></div>
@@ -70,23 +71,27 @@ const SideNavbar = () => {
         </div>
 
         {isOpen ? (
-          <div >
-            <input
+          <div>
+            {/* <input
             type="text"
             value={noteInput}
             placeholder="Add Note"
             onChange={changeNoteInput}
-            />
+            /> */}
             <button onClick={handleAddNote}>New Note</button>
             {notes.map((item) => (
-              
-              <div key={item.id} id={item.id} >
-                
+              <div key={item.id} id={item.id}>
                 <Link
                   to={`/profile/${currentUser.id}/${item.id}`}
-                  style={{ color: "white", backgroundColor:'blue'}}
+                  style={{ color: "white", backgroundColor: "blue" }}
+                  onChange={changeNoteInput}
                 >
-                  {item.noteInput}
+                  <input
+                    type="text"
+                    value={item.noteInput}
+                    placeholder="Add Note"
+                    onChange={changeNoteInput}
+                  />
                 </Link>
               </div>
             ))}
