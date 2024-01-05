@@ -8,7 +8,8 @@ import { useNote } from "../components/NoteContext";
 
 const NoteService = () => {
   const { notes, setNotes } = useNote();
-  const {noteInput, setNoteInput} = useNote();
+  const { noteInput, setNoteInput } = useNote();
+  
   const currentUser = AuthService.getCurrentUser();
   const API_URL = `http://localhost:3001/profile/${currentUser.id}`;
   const navigate = useNavigate();
@@ -22,20 +23,22 @@ const NoteService = () => {
       })
       .then((res) => {
         const newNote = {
-          id: res.data.id, 
-          noteInput: 
-            noteInput !== '' ? noteInput : 'New Note' };
+          id: res.data.id,
+          noteInput: noteInput !== "" ? noteInput : "New Note",
+        };
         setNotes((prevNote) => [...prevNote, newNote]);
-        setNoteInput('')
-        navigate(`/profile/${currentUser.id}/${newNote.id}`)
-        console.log(newNote.noteInput)
-      })  
+        
+        navigate(`/profile/${currentUser.id}/${newNote.id}`);
+
+        console.log(newNote.noteInput);
+      })
       .catch((error) => {
         console.error("Error adding note:", error);
       });
   };
 
   const changeNoteInput = (e) => {
+    
     setNoteInput(e.target.value);
   };
 
@@ -43,26 +46,23 @@ const NoteService = () => {
     const updatedNotes = notes.map((item) => {
       return {
         id: item.id,
-        noteInput: item.noteInput
-      }
+        noteInput: item.noteInput,
+      };
     });
-   
-
     await axios.patch(
       `http://localhost:3001/profile/${currentUser.id}/${updatedNotes.id}`,
       updatedNotes
-    );
+    ).then(
+      setNotes((prevNote) => [...prevNote, updatedNotes])
+    )
+  };
 
-  }
+  const handleDeleteNote = () => {};
 
-
-  const handleDeleteNote = () => {
- 
-  }
 
   useAutosave(() => {
     handleNoteSave();
-  }, 60*1000)
+  }, 60 * 1000);
 
   return {
     notes,

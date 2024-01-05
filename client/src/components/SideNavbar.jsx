@@ -27,6 +27,8 @@ const SideNavbar = () => {
     notes,
     setNotes,
     noteInput,
+    newLink,
+    setNewLink,
     handleAddNote,
     changeNoteInput,
     handleNoteSave,
@@ -61,6 +63,11 @@ const SideNavbar = () => {
     }
   }
 
+  const [isEditing, setIsEditing] = useState(true);
+
+  const toggleEditMode = () => {
+    setIsEditing(!isEditing);
+  };
   return (
     <>
       <div id="mySidebar" className="sidebar" style={{ width: sidebarWidth }}>
@@ -84,14 +91,8 @@ const SideNavbar = () => {
                 <Link
                   to={`/profile/${currentUser.id}/${item.id}`}
                   style={{ color: "white", backgroundColor: "blue" }}
-                  onChange={changeNoteInput}
                 >
-                  <input
-                    type="text"
-                    value={item.noteInput}
-                    placeholder="Add Note"
-                    onChange={changeNoteInput}
-                  />
+                 {item.noteInput}
                 </Link>
               </div>
             ))}

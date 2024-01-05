@@ -10,7 +10,6 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
-import ProfileWithBoxes from "./components/ProfileWithBoxes";
 import ProfileHeader from "./components/ProfileHeader";
 import Notes from "./components/Boxes";
 import BoardUser from "./components/BoardUser";
@@ -90,8 +89,8 @@ const App = () => {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
           <Route path="/profile" element={<SideNavbar />}>
-            <Route index element={<Profile />} />
-            <Route path=":userId/*" element={<ProfileWithBoxes />} />
+            <Route path="/profile/:userId" element={<ProfileHeader />} />
+            <Route path=":userId/*" element={<Profile />} />
           </Route>
           <Route path="/user" element={<BoardUser />} />
           <Route path="/mod" element={<BoardModerator />} />
