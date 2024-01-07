@@ -61,12 +61,11 @@ const Crud = () => {
         id: item.id,
       };
     });
-    console.log(updatedBoxes);
     await axios.patch(
       `http://localhost:3001/profile/${currentUser.id}`,
       updatedBoxes
     );
-    console.log(updatedBoxes);
+    console.log('Saved Boxes:' + updatedBoxes);
   };
 
   const changeInput = (e) => {

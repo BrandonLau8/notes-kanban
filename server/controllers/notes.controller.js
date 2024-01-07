@@ -29,15 +29,15 @@ exports.createNote = async (req, res) => {
 exports.updateNotes = async (req, res) => {
     try {
       const updatedNotes = req.body;
-      for (updatedNote of updatedNotes) {
-        const { id, noteInput } = updatedNote;
+    //   for (updatedNote of updatedNotes) {
+        const { id, noteInput } = updatedNotes;
         const note = await Notes.update(
           { noteInput },
           {
             where: { id },
           }
         );
-      }
+    //   }
       console.log(req.body);
   
       res.status(200).send({ message: "note updated" });

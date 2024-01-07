@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const toggleInputs = () => {
-  const [isEditing, setIsEditing] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
 
   const toggleEditMode = () => {
     setIsEditing(!isEditing);
