@@ -37,7 +37,7 @@ const App = () => {
         setLoading(true);
 
         const user = await AuthService.getCurrentUser();
-        console.log("Fetched user data:", user);
+        // console.log("Fetched user data:", user);
 
         if (user) {
           setCurrentUser((prevUser) => ({ ...prevUser, ...user }));

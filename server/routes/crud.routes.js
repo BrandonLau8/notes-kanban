@@ -23,4 +23,6 @@ module.exports = function (app) {
 
   app.patch('/profile/:userId/:notesId', notesControl.updateNotes)
 
+  app.get('/profile/:userId/:notesId', notesControl.getNotes)
+
 };

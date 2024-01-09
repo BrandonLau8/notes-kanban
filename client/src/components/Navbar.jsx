@@ -9,7 +9,7 @@ const Navbar = ({ isAuthenticated, showModeratorBoard, showAdminBoard, currentUs
     return (
     <nav className="navbar navbar-expand navbar-dark bg-dark">
     <Link to={"/"} className="navbar-brand">
-      bezKoder
+      Kanban Notes
     </Link>
     <div className="navbar-nav mr-auto">
       <li className="nav-item">

@@ -1,16 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import ProfileHeader from "./ProfileHeader";
-import { Outlet } from "react-router-dom";
-import Boxes from "./Boxes";
 import toggleInputs from "../utilities/toggleInputs";
 import NoteService from "../services/note.service";
 import { Link } from "react-router-dom";
 import { useLocation} from "react-router-dom";
 
 
-
-const Profile = () => {
+const CurrentNote = () => {
   const { isEditing, setIsEditing, toggleEditMode } = toggleInputs();
 
   const {
@@ -26,47 +22,13 @@ const Profile = () => {
 
   // Find the note with the specified notesId
   const currentNote = notes.find((note) => note.id === noteId);
-  
+
   // console.log("currentNote:", currentNote)
   // console.log("notes:", notes)
   // console.log('noteInput:', noteInput)
- 
-
-
-  const inputRef = useRef(null);
-  const location = useLocation();
-
-
-  useEffect(() => {
-    if (isEditing) {
-      inputRef.current.focus();
-    }
-  }, [isEditing]);
-
-  useEffect(() => {
-    if (currentNote) {
-      if (isEditing) {
-        currentNote.noteInput = noteInput
-        
-      }
-      console.log('currentNoteInput:' + currentNote.noteInput)
-    }
-  }, [currentNote, toggleEditMode, setNoteInput]);
-
-  useEffect(() => {
-    
-    const toggledNote = notes.find((note) => note.id === noteId);
-    currentNote.noteInput = toggledNote.noteInput
-    console.log('noteId:', noteId)
-  
-  }, [noteId]);
-
-
-
 
   return (
     <>
-      <ProfileHeader />
       <div>
         {currentNote && (
           <div key={currentNote.id} onClick={toggleEditMode}>
@@ -81,7 +43,6 @@ const Profile = () => {
 
                     setTimeout(() => {
                       handleNoteSave();
-                      
                     }, 0);
                   }
                 }}
@@ -93,10 +54,8 @@ const Profile = () => {
           </div>
         )}
       </div>
-      <Boxes />
-      <Outlet />
     </>
   );
 };
 
-export default Profile;
+export default CurrentNote;

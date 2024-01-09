@@ -1,48 +1,65 @@
-const db = require('../models')
-const Notes = db.notes; 
+const db = require("../models");
+const Notes = db.notes;
 
-exports.createNote = async (req, res) => {  
-    // const notesId = req.body.notesId;
-    const userId = req.params.userId;
-    const data = req.body;
+exports.getNotes = (req, res) => {
+  const userId = req.params.userId;
 
-    try {
-        const note = await Notes.create({
-            ...data,
-            // notesId: notesId,
-            userId: userId
-        })
-        console.log(note)
+  Notes.findAll({
+    where: {
+      userId,
+    },
+  })
+    .then((content) => {
+      res.status(200).json({ content });
+    })
+    .catch((error) => {
+      console.error("Error fetching notes:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    });
+};
 
-        const createdNote = {
-            id: note.dataValues.id,
-            message: 'New Note Created'
-        }
+exports.createNote = async (req, res) => {
+  // const notesId = req.body.notesId;
+  const userId = req.params.userId;
+  const data = req.body;
 
-        return res.status(201).json(createdNote);
-    } catch (err) {
-        console.error(err)
-        return res.status(400).json({ message: "Invalid note data received" });
-    }
-}
+  try {
+    const note = await Notes.create({
+      ...data,
+      // notesId: notesId,
+      userId: userId,
+    });
+    console.log(note);
+
+    const createdNote = {
+      id: note.dataValues.id,
+      message: "New Note Created",
+    };
+
+    return res.status(201).json(createdNote);
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({ message: "Invalid note data received" });
+  }
+};
 
 exports.updateNotes = async (req, res) => {
-    try {
-      const updatedNotes = req.body;
+  try {
+    const updatedNotes = req.body;
     //   for (updatedNote of updatedNotes) {
-        const { id, noteInput } = updatedNotes;
-        const note = await Notes.update(
-          { noteInput },
-          {
-            where: { id },
-          }
-        );
+    const { id, noteInput } = updatedNotes;
+    const note = await Notes.update(
+      { noteInput },
+      {
+        where: { id },
+      }
+    );
     //   }
-      console.log(req.body);
-  
-      res.status(200).send({ message: "note updated" });
-    } catch (err) {
-      console.error(err);
-      res.status(400).send(err);
-    }
-  };
+    console.log(req.body);
+
+    res.status(200).send({ message: "note updated" });
+  } catch (err) {
+    console.error(err);
+    res.status(400).send(err);
+  }
+};

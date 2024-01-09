@@ -29,6 +29,8 @@ const SideNavbar = () => {
     noteInput,
     newLink,
     setNewLink,
+    noteId,
+    setNoteId,
     handleAddNote,
     changeNoteInput,
     handleNoteSave,
@@ -68,6 +70,11 @@ const SideNavbar = () => {
   const toggleEditMode = () => {
     setIsEditing(!isEditing);
   };
+
+
+
+  console.log('notes:',notes)
+
   return (
     <>
       <div id="mySidebar" className="sidebar" style={{ width: sidebarWidth }}>
@@ -79,18 +86,13 @@ const SideNavbar = () => {
 
         {isOpen ? (
           <div>
-            {/* <input
-            type="text"
-            value={noteInput}
-            placeholder="Add Note"
-            onChange={changeNoteInput}
-            /> */}
             <button onClick={handleAddNote}>New Note</button>
             {notes.map((item) => (
               <div key={item.id} id={item.id}>
                 <Link
                   to={`/profile/${currentUser.id}/${item.id}`}
                   style={{ color: "white", backgroundColor: "blue" }}
+                  onClick={() => setNoteId(item.id)}  // Pass a function to onClick
                 >
                  {item.noteInput}
                 </Link>

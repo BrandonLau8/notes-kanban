@@ -16,7 +16,23 @@ const NoteService = () => {
   const API_URL = `http://localhost:3001/profile/${currentUser.id}`;
   const navigate = useNavigate();
 
-  const getNotes = () => {};
+  const getNotes = async () => {
+    const allNotes = notes.map((item) => ({
+      id: item.id,
+      noteInput: item.noteInput,
+    }));
+    
+   await Promise.all(
+      allNotes.map((item) =>
+        axios.get(
+          `http://localhost:3001/profile/${currentUser.id}/${item.id}`
+        )
+      )
+    ).then((response) => {
+      console.log("getNotes:", response);
+      setNotes(response);
+    });
+  };
 
   const handleAddNote = () => {
     const defaultNoteInput = "New Note";
@@ -31,7 +47,6 @@ const NoteService = () => {
         };
         setNoteId(res.data.id);
         setNotes((prevNote) => [...prevNote, newNote]);
-        
 
         navigate(`/profile/${currentUser.id}/${newNote.id}`);
 
@@ -44,7 +59,6 @@ const NoteService = () => {
 
   const changeNoteInput = (e) => {
     setNoteInput(e.target.value);
-
   };
 
   const handleNoteSave = async () => {
@@ -85,6 +99,7 @@ const NoteService = () => {
     setNoteInput,
     noteId,
     setNoteId,
+    getNotes,
     handleAddNote,
     handleNoteSave,
     changeNoteInput,
