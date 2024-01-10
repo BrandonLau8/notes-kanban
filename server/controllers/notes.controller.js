@@ -9,8 +9,14 @@ exports.getNotes = (req, res) => {
       userId,
     },
   })
-    .then((content) => {
-      res.status(200).json({ content });
+
+    .then((allNotes) => {
+      const transformedNotes = allNotes.map((note) => ({
+        id: note.dataValues.id,
+        noteInput: note.dataValues.noteInput,
+      }));
+      res.status(200).json(transformedNotes);
+      console.log("transformedNotes:",transformedNotes)
     })
     .catch((error) => {
       console.error("Error fetching notes:", error);
@@ -25,14 +31,15 @@ exports.createNote = async (req, res) => {
 
   try {
     const note = await Notes.create({
-      ...data,
       // notesId: notesId,
       userId: userId,
+      noteInput: data.defaultNoteInput,
     });
     console.log(note);
 
     const createdNote = {
       id: note.dataValues.id,
+      noteInput: note.dataValues.noteInput,
       message: "New Note Created",
     };
 

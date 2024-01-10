@@ -61,9 +61,6 @@ const Profile = () => {
   
   }, [noteId]);
 
-
-
-
   return (
     <>
       <ProfileHeader />

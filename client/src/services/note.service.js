@@ -16,29 +16,37 @@ const NoteService = () => {
   const API_URL = `http://localhost:3001/profile/${currentUser.id}`;
   const navigate = useNavigate();
 
-  const getNotes = async () => {
+  useEffect(() => {
+    getNotes();
+    localStorage.setItem("notes", JSON.stringify(notes));
+
+    // return () => {localStorage.removeitem('notes')}
+  }, [noteId]);
+
+  const getNotes = () => {
     const allNotes = notes.map((item) => ({
       id: item.id,
       noteInput: item.noteInput,
     }));
-    
-   await Promise.all(
+    Promise.all(
       allNotes.map((item) =>
         axios.get(
-          `http://localhost:3001/profile/${currentUser.id}/${item.id}`
+          `http://localhost:3001/profile/${currentUser.id}/${item.id}`,
+          { params: item }
         )
       )
     ).then((response) => {
-      console.log("getNotes:", response);
-      setNotes(response);
-    });
+     response.map((item) => setNotes((prevNote)=>[prevNote, ...item.data]))
+    })
+    console.log(notes)
+    
   };
 
   const handleAddNote = () => {
     const defaultNoteInput = "New Note";
     axios
       .post(API_URL, {
-        noteInput,
+        defaultNoteInput,
       })
       .then((res) => {
         const newNote = {

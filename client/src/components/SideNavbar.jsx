@@ -71,10 +71,6 @@ const SideNavbar = () => {
     setIsEditing(!isEditing);
   };
 
-
-
-  console.log('notes:',notes)
-
   return (
     <>
       <div id="mySidebar" className="sidebar" style={{ width: sidebarWidth }}>
@@ -92,9 +88,9 @@ const SideNavbar = () => {
                 <Link
                   to={`/profile/${currentUser.id}/${item.id}`}
                   style={{ color: "white", backgroundColor: "blue" }}
-                  onClick={() => setNoteId(item.id)}  // Pass a function to onClick
+                  onClick={() => setNoteId(item.id)} // Pass a function to onClick
                 >
-                 {item.noteInput}
+                  {item.noteInput}
                 </Link>
               </div>
             ))}
