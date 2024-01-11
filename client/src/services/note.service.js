@@ -19,8 +19,7 @@ const NoteService = () => {
   useEffect(() => {
     getNotes();
     localStorage.setItem("notes", JSON.stringify(notes));
-
-    // return () => {localStorage.removeitem('notes')}
+    localStorage.setItem("noteId", JSON.stringify(noteId));
   }, [noteId]);
 
   const getNotes = () => {
@@ -36,10 +35,9 @@ const NoteService = () => {
         )
       )
     ).then((response) => {
-     response.map((item) => setNotes((prevNote)=>[prevNote, ...item.data]))
-    })
-    console.log(notes)
-    
+      response.map((item) => setNotes((prevNote) => [prevNote, ...item.data]));
+    });
+    console.log(notes);
   };
 
   const handleAddNote = () => {
@@ -94,7 +92,9 @@ const NoteService = () => {
     );
   };
 
-  const handleDeleteNote = () => {};
+  const handleDeleteNote = (item) => {
+    const deleteNote = notes.filter((val) => {val.id !== item.id})
+  };
 
   useAutosave(() => {
     handleNoteSave();
