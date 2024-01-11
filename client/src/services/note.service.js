@@ -16,11 +16,11 @@ const NoteService = () => {
   const API_URL = `http://localhost:3001/profile/${currentUser.id}`;
   const navigate = useNavigate();
 
-  useEffect(() => {
-    getNotes();
-    localStorage.setItem("notes", JSON.stringify(notes));
-    localStorage.setItem("noteId", JSON.stringify(noteId));
-  }, [noteId]);
+  // useEffect(() => {
+  //   getNotes();
+  //   localStorage.setItem("notes", JSON.stringify(notes));
+  //   localStorage.setItem("noteId", JSON.stringify(noteId));
+  // }, [noteId]);
 
   const getNotes = () => {
     const allNotes = notes.map((item) => ({
@@ -93,7 +93,16 @@ const NoteService = () => {
   };
 
   const handleDeleteNote = (item) => {
-    const deleteNote = notes.filter((val) => {val.id !== item.id})
+    const updatedNote = notes.filter((val) => val.id !== item);
+
+    axios
+      .delete(`http://localhost:3001/profile/${currentUser.id}`, {
+        data: { id: item },
+      })
+      .then(() => {
+        setNotes(updatedNote);
+        console.log(updatedNote);
+      });
   };
 
   useAutosave(() => {
@@ -110,6 +119,7 @@ const NoteService = () => {
     getNotes,
     handleAddNote,
     handleNoteSave,
+    handleDeleteNote,
     changeNoteInput,
   };
 };

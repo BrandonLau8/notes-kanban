@@ -16,7 +16,7 @@ exports.getNotes = (req, res) => {
         noteInput: note.dataValues.noteInput,
       }));
       res.status(200).json(transformedNotes);
-      console.log("transformedNotes:",transformedNotes)
+      // console.log("transformedNotes:", transformedNotes);
     })
     .catch((error) => {
       console.error("Error fetching notes:", error);
@@ -48,6 +48,21 @@ exports.createNote = async (req, res) => {
     console.error(err);
     return res.status(400).json({ message: "Invalid note data received" });
   }
+};
+
+exports.deleteNote = async (req, res) => {
+  const noteId = req.body.id;
+  const userId = req.params.userId
+
+  await Notes.destroy({
+    where: {
+      id: noteId,
+      userId: userId
+    },
+  })
+  .then(() => {
+    res.status(200).json({ message: "note deleted" });
+  });
 };
 
 exports.updateNotes = async (req, res) => {

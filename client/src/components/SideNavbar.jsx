@@ -32,6 +32,7 @@ const SideNavbar = () => {
     noteId,
     setNoteId,
     handleAddNote,
+    handleDeleteNote,
     changeNoteInput,
     handleNoteSave,
   } = Notes();
@@ -85,6 +86,7 @@ const SideNavbar = () => {
             <button onClick={handleAddNote}>New Note</button>
             {notes.map((item) => (
               <div key={item.id} id={item.id}>
+                <div>
                 <Link
                   to={`/profile/${currentUser.id}/${item.id}`}
                   style={{ color: "white", backgroundColor: "blue" }}
@@ -92,6 +94,9 @@ const SideNavbar = () => {
                 >
                   {item.noteInput}
                 </Link>
+                
+                <button onClick={() => handleDeleteNote(item.id)}>Delete + {item.id}</button>
+              </div>
               </div>
             ))}
           </div>
