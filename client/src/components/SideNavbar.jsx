@@ -83,8 +83,11 @@ const SideNavbar = () => {
 
         {isOpen ? (
           <div>
+            <div>
             <button onClick={handleAddNote}>New Note</button>
-            {notes.map((item) => (
+            </div>
+            <div>
+            {notes.slice(1).map((item) => (
               <div key={item.id} id={item.id}>
                 <div>
                 <Link
@@ -92,13 +95,14 @@ const SideNavbar = () => {
                   style={{ color: "white", backgroundColor: "blue" }}
                   onClick={() => setNoteId(item.id)} // Pass a function to onClick
                 >
-                  {item.noteInput}
+                 {item.noteInput}
                 </Link>
                 
                 <button onClick={() => handleDeleteNote(item.id)}>Delete + {item.id}</button>
               </div>
               </div>
             ))}
+            </div>
           </div>
         ) : null}
 

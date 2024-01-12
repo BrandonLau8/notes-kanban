@@ -16,11 +16,11 @@ const NoteService = () => {
   const API_URL = `http://localhost:3001/profile/${currentUser.id}`;
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   getNotes();
-  //   localStorage.setItem("notes", JSON.stringify(notes));
-  //   localStorage.setItem("noteId", JSON.stringify(noteId));
-  // }, [noteId]);
+  useEffect(() => {
+    getNotes();
+    localStorage.setItem("notes", JSON.stringify(notes));
+    localStorage.setItem("noteId", JSON.stringify(noteId));
+  }, [noteId]);
 
   const getNotes = () => {
     const allNotes = notes.map((item) => ({
@@ -101,7 +101,17 @@ const NoteService = () => {
       })
       .then(() => {
         setNotes(updatedNote);
+
         console.log(updatedNote);
+        console.log(item);
+      })
+      .then(() => {
+        if (item === noteId) {
+          const redirectNote = updatedNote[updatedNote.length-1]
+          setNoteId(redirectNote.id);
+          console.log(redirectNote)
+          navigate(`/profile/${currentUser.id}/${redirectNote.id}`);
+        }
       });
   };
 
