@@ -3,6 +3,7 @@ import axios from "axios";
 import AuthService from "../services/auth.service";
 import useAutosave from "./useAutosave";
 import Notes from "../services/note.service";
+import { useNote } from "./NoteContext";
 
 const Crud = () => {
   const currentUser = AuthService.getCurrentUser();
@@ -11,6 +12,10 @@ const Crud = () => {
   const [input, setInput] = useState("");
   const [content, setContent] = useState("");
 
+  // const currentBoxes = box.find((item) => item.id === boxId);
+  // console.log(currentBoxes.id)
+  const { noteId, setNoteId } = useNote();
+  const {boxId, setBoxId} = useNote()
   
 
   const getBox = () => {
@@ -23,13 +28,14 @@ const Crud = () => {
   };
 
   const handleAddBox = (e) => {
-    e.preventDefault();
+    const defaultContent = 'New Content'
     axios
-      .post(`http://localhost:3001/profile/${currentUser.id}`, {
+      .post(`http://localhost:3001/profile/${currentUser.id}/${noteId}`, {
         input: input,
+        content: defaultContent,
       })
       .then((res) => {
-        console.log(res.data.id);
+        console.log(res);
         const newBox = { input: input, content: "", id: res.data.id };
         setBox((prevBox) => [...prevBox, newBox]);
         setInput("");
@@ -74,13 +80,13 @@ const Crud = () => {
 
   useEffect(() => {
     getBox();
-    localStorage.setItem("data", JSON.stringify(box));
+    localStorage.setItem("boxes", JSON.stringify(box));
 
-    //Cleanup function
-    return () => {
-      localStorage.removeItem("data");
-    };
-  }, [currentUser.id]);
+    // //Cleanup function
+    // return () => {
+    //   localStorage.removeItem("data");
+    // };
+  }, [noteId]);
 
   useAutosave(() => {
     handleSave();

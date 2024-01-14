@@ -2,28 +2,31 @@ const db = require("../models");
 const Crud = db.crud; // id, input, content
 
 exports.createBox = async (req, res) => {
-  // const notesId = req.params.notesId;
+  const notesId = req.params.notesId;
+  const userId = req.params.userId;
   const data = req.body;
   
   try {
-    const note = await Crud.create({
-      ...data,
-      // notesId: notesId,
+    const box = await Crud.create({
+      notesId: notesId,
+      userId: userId,
+      content: data.defaultContent,
+      input: data.input,
     });
     
     // console.log(note.dataValues.id);
-    if (!note) {
+    if (!box) {
       return res.status(404).send({ message: "No input" });
     }
     
-    const createdNote = {
-      id: note.dataValues.id,
-      message: "New Note Created",
+    const createdBox = {
+      id: box.dataValues.id,
+      input: box.dataValues.input,
+      content: box.dataValues.content,
+      message: "New Box Created",
     };
 
-    // console.log(createdNote.id);
-
-    return res.status(201).json(createdNote);
+    return res.status(201).json(createdBox);
     
   } catch (err) {
     console.error(err);

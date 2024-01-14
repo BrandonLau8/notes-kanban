@@ -17,14 +17,14 @@ module.exports = function (app) {
 
   app.patch('/profile/:userId', controller.updateBoxes)
 
-  // app.delete('/profile/:userId', controller.deleteBoxes)
+  app.delete('/profile/:userId', notesControl.deleteNote, controller.deleteBoxes)
 
-  app.post('/profile/:userId', notesControl.createNote, controller.createBox)
+  app.post('/profile/:userId', notesControl.createNote)
 
   app.patch('/profile/:userId/:notesId', notesControl.updateNotes)
 
   app.get('/profile/:userId/:notesId', notesControl.getNotes)
 
-  app.delete('/profile/:userId', notesControl.deleteNote)
+  app.post('/profile/:userId/:notesId', controller.createBox)
 
 };

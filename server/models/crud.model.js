@@ -3,7 +3,7 @@ module.exports = (sequelize, Sequelize) => {
     "crud",
     {
       id: {
-        type: Sequelize.BIGINT,
+        type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
@@ -14,13 +14,15 @@ module.exports = (sequelize, Sequelize) => {
       content: {
         type: Sequelize.STRING,
       },
-      // notesId: {
-      //   type: Sequelize.INTEGER,
-      //   allowNull: false,
-      // },
-    },
-    
-  );
+      notesId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'notes', // This should match the table name of the 'notes' model
+          key: 'id',
+        },
+      },
+    });
 
   return Crud;
 };

@@ -38,14 +38,18 @@ const Profile = () => {
     if (currentNote) {
       if (isEditing) {
         currentNote.noteInput = noteInput;
-      }
+      } 
       console.log("currentNoteInput:" + currentNote.noteInput);
     }
   }, [currentNote, toggleEditMode, setNoteInput]);
 
   useEffect(() => {
     const toggledNote = notes.find((note) => note.id === noteId);
-    currentNote.noteInput = toggledNote.noteInput;
+    if(toggledNote) {
+      currentNote.noteInput = toggledNote.noteInput;
+    } else {
+      currentNote.noteInput = null;
+    }
     console.log("noteId:", noteId);
   }, [noteId]);
 

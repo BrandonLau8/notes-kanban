@@ -91,6 +91,7 @@ const App = () => {
           <Route path="/profile" element={<SideNavbar />}>
             <Route path="/profile/:userId" element={<ProfileHeader />} />
             <Route path=":userId/*" element={<Profile />} />
+    
           </Route>
           <Route path="/user" element={<BoardUser />} />
           <Route path="/mod" element={<BoardModerator />} />
