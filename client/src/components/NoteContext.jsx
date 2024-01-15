@@ -1,8 +1,13 @@
 import React, { createContext, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AuthService from "../services/auth.service";
 
 const NoteContext = createContext();
 
+
 export const NoteProvider = ({ children }) => {
+  const navigate = useNavigate();
+  const currentUser = AuthService.getCurrentUser();
   const savedNoteId = localStorage.getItem("noteId");
   const savedNotes = localStorage.getItem("notes");
   const savedBoxId = localStorage.getItem('boxes')

@@ -20,6 +20,11 @@ const NoteService = () => {
     getNotes();
     localStorage.setItem("notes", JSON.stringify(notes));
     localStorage.setItem("noteId", JSON.stringify(noteId));
+
+    if(noteId === undefined) {
+      
+      navigate(`/profile/${currentUser.id}`)
+    }
   }, [noteId]);
 
   const getNotes = () => {
@@ -112,6 +117,7 @@ const NoteService = () => {
           console.log(redirectNote)
           navigate(`/profile/${currentUser.id}/${redirectNote.id}`);
         }
+       
       });
   };
 
