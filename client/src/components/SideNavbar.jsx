@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../SideNavbar.css";
-import Crud from "./Crud";
+import CrudService from "../services/crud.service";
 import Notes from "../services/note.service";
 import { Outlet } from "react-router-dom";
 
@@ -21,7 +21,7 @@ const SideNavbar = () => {
     setBox,
     input,
     setInput,
-  } = Crud();
+  } = CrudService();
 
   const {
     notes,
@@ -29,7 +29,7 @@ const SideNavbar = () => {
     noteInput,
     newLink,
     setNewLink,
-    noteId,
+    notesId,
     setNoteId,
     handleAddNote,
     handleDeleteNote,

@@ -3,29 +3,34 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthService from "./auth.service";
 import useAutosave from "../components/useAutosave";
-import Crud from "../components/Crud";
+import CrudService from "./crud.service";
 import { useNote } from "../components/NoteContext";
 
 const NoteService = () => {
   const { notes, setNotes } = useNote();
   const { noteInput, setNoteInput } = useNote();
-  const { noteId, setNoteId } = useNote();
+  const { notesId, setNotesId } = useNote();
+  const {box, setBox} = useNote();
 
   const currentUser = AuthService.getCurrentUser();
 
   const API_URL = `http://localhost:3001/profile/${currentUser.id}`;
   const navigate = useNavigate();
 
+  const {getBox} = CrudService()
+
   useEffect(() => {
     getNotes();
     localStorage.setItem("notes", JSON.stringify(notes));
-    localStorage.setItem("noteId", JSON.stringify(noteId));
+    localStorage.setItem("notesId", JSON.stringify(notesId));
 
-    if(noteId === undefined) {
-      
-      navigate(`/profile/${currentUser.id}`)
+    if (notesId === undefined) {
+      navigate(`/profile/${currentUser.id}`);
     }
-  }, [noteId]);
+    console.log('hello')
+    getBox()
+  
+  }, [notesId]);
 
   const getNotes = () => {
     const allNotes = notes.map((item) => ({
@@ -35,7 +40,7 @@ const NoteService = () => {
     Promise.all(
       allNotes.map((item) =>
         axios.get(
-          `http://localhost:3001/profile/${currentUser.id}/${item.id}`,
+          `http://localhost:3001/profile/${currentUser.id}`,
           { params: item }
         )
       )
@@ -56,12 +61,12 @@ const NoteService = () => {
           id: res.data.id,
           noteInput: defaultNoteInput,
         };
-        setNoteId(res.data.id);
+        setNotesId(res.data.id);
         setNotes((prevNote) => [...prevNote, newNote]);
 
         navigate(`/profile/${currentUser.id}/${newNote.id}`);
 
-        console.log("Value of noteId:", noteId);
+        console.log("Value of noteId:", notesId);
       })
       .catch((error) => {
         console.error("Error adding note:", error);
@@ -101,7 +106,7 @@ const NoteService = () => {
     const updatedNote = notes.filter((val) => val.id !== item);
 
     axios
-      .delete(`http://localhost:3001/profile/${currentUser.id}`, {
+      .delete(`http://localhost:3001/profile/${currentUser.id}/${item}`, {
         data: { id: item },
       })
       .then(() => {
@@ -111,13 +116,12 @@ const NoteService = () => {
         console.log(item);
       })
       .then(() => {
-        if (item === noteId) {
-          const redirectNote = updatedNote[updatedNote.length-1]
-          setNoteId(redirectNote.id);
-          console.log(redirectNote)
+        if (item === notesId) {
+          const redirectNote = updatedNote[updatedNote.length - 1];
+          setNotesId(redirectNote.id);
+          console.log(redirectNote);
           navigate(`/profile/${currentUser.id}/${redirectNote.id}`);
         }
-       
       });
   };
 
@@ -130,8 +134,8 @@ const NoteService = () => {
     setNotes,
     noteInput,
     setNoteInput,
-    noteId,
-    setNoteId,
+    notesId,
+    setNotesId,
     getNotes,
     handleAddNote,
     handleNoteSave,

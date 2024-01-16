@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Crud from "./Crud";
+import Crud from "../services/crud.service";
 import NoteService from "../services/note.service";
 
 const BoxInput = () => {

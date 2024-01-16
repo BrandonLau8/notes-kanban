@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Crud from "./Crud";
+import Crud from "../services/crud.service";
 import NoteService from "../services/note.service";
 import BoxInput from "./BoxInput";
 
@@ -20,15 +20,11 @@ const Boxes = () => {
   const {
     notes,
     noteInput,
-    noteId,
+    notesId,
     setNoteInput,
     changeNoteInput,
     handleAddNote,
   } = NoteService();
-
-  useEffect(() => {
-    const toggledBoxes = box.find((item) => item.id === boxId);
-  }, [noteId]);
 
   return (
     <>
@@ -83,7 +79,9 @@ const Boxes = () => {
               }}
             />
           </div>
-        ))}
+        ))
+     
+      }
       </div>
 
       {/* ) : null} */}

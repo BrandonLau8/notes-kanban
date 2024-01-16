@@ -13,18 +13,20 @@ module.exports = function (app) {
   
   // app.post('/profile/:userId', controller.createBox)
 
-  app.get('/profile/:userId', controller.getBoxes)
+  app.get('/profile/:userId/:notesId', controller.getBoxes)
 
   app.patch('/profile/:userId', controller.updateBoxes)
 
-  app.delete('/profile/:userId', notesControl.deleteNote, controller.deleteBoxes)
+  app.delete('/profile/:userId', controller.deleteBoxes)
 
   app.post('/profile/:userId', notesControl.createNote)
 
   app.patch('/profile/:userId/:notesId', notesControl.updateNotes)
 
-  app.get('/profile/:userId/:notesId', notesControl.getNotes)
+  app.get('/profile/:userId', notesControl.getNotes)
 
   app.post('/profile/:userId/:notesId', controller.createBox)
+
+  app.delete(`/profile/:userId/:notesId`, notesControl.deleteNote)
 
 };

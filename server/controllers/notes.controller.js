@@ -35,7 +35,6 @@ exports.createNote = async (req, res) => {
       userId: userId,
       noteInput: data.defaultNoteInput,
     });
-    console.log(note);
 
     const createdNote = {
       id: note.dataValues.id,
@@ -51,12 +50,12 @@ exports.createNote = async (req, res) => {
 };
 
 exports.deleteNote = async (req, res) => {
-  const noteId = req.body.id;
+  const notesId = req.body.id;
   const userId = req.params.userId
 
   await Notes.destroy({
     where: {
-      id: noteId,
+      id: notesId,
       userId: userId
     },
   })

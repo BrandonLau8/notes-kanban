@@ -14,7 +14,6 @@ exports.createBox = async (req, res) => {
       input: data.input,
     });
     
-    // console.log(note.dataValues.id);
     if (!box) {
       return res.status(404).send({ message: "No input" });
     }
@@ -23,6 +22,7 @@ exports.createBox = async (req, res) => {
       id: box.dataValues.id,
       input: box.dataValues.input,
       content: box.dataValues.content,
+      notesId: box.dataValues.notesId,
       message: "New Box Created",
     };
 
@@ -35,19 +35,22 @@ exports.createBox = async (req, res) => {
 };
 
 exports.getBoxes = (req, res) => {
-  // const userId = req.params.userId;
-  // const notesId = req.params.notesId;
+  const userId = req.params.userId;
+  const notesId = req.params.notesId;
   Crud.findAll({
     where: {
-      // userId,
-      // notesId,
+      // userId: userId,
+      notesId,
     },
   })
-    .then((content) => {
-      // if (!content?.length) {
-      //   return res.status(400).send({ message: "No content" });
-      // }
-      res.status(200).json({ content });
+    .then((allBoxes) => {
+      const transformedBoxes = allBoxes.map((box) => ({
+        id: box.dataValues.id,
+        input: box.dataValues.input,
+        content: box.dataValues.content,
+        notesId: box.dataValues.notesId,
+      }));
+      res.status(200).json(transformedBoxes);
     })
     .catch((err) => {
       console.error("Error retrieving boxes:", err);
@@ -78,11 +81,13 @@ exports.updateBoxes = async (req, res) => {
 
 exports.deleteBoxes = async (req, res) => {
   const input = req.body.input;
+  const id = req.body.id;
   const data = req.body;
+
   try {
     await Crud.destroy({
       where: {
-        input,
+        id: id,
       },
     });
     res.status(200).json({ message: "Note deleted" });

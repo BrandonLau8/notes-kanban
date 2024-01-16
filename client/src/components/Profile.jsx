@@ -15,7 +15,7 @@ const Profile = () => {
     notes,
     noteInput,
     setNoteInput,
-    noteId,
+    notesId,
     changeNoteInput,
     getNotes,
     handleAddNote,
@@ -23,7 +23,7 @@ const Profile = () => {
   } = NoteService();
 
   // Find the note with the specified notesId
-  const currentNote = notes.find((note) => note.id === noteId);
+  const currentNote = notes.find((note) => note.id === notesId);
 
   const inputRef = useRef(null);
   const location = useLocation();
@@ -44,14 +44,14 @@ const Profile = () => {
   }, [currentNote, toggleEditMode, setNoteInput]);
 
   useEffect(() => {
-    const toggledNote = notes.find((note) => note.id === noteId);
+    const toggledNote = notes.find((note) => note.id === notesId);
     if(toggledNote) {
       currentNote.noteInput = toggledNote.noteInput;
     } else {
       currentNote.noteInput = null;
     }
-    console.log("noteId:", noteId);
-  }, [noteId]);
+    console.log("noteId:", notesId);
+  }, [notesId]);
 
   return (
     <>
