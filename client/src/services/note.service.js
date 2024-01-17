@@ -46,7 +46,9 @@ const NoteService = () => {
       )
     ).then((response) => {
       response.map((item) => setNotes((prevNote) => [prevNote, ...item.data]));
+      console.log(response)
     });
+    
     console.log(notes);
   };
 

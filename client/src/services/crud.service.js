@@ -18,35 +18,32 @@ const CrudService = () => {
   // const currentBoxes = box.find((item) => item.id === boxId);
   // console.log(currentBoxes.id)
 
+  useEffect(() => {
+    // const toggledBoxes = box.map((item) => item.id === notesId)
+
+    getBox();
+  }, [notesId]);
+
   // useEffect(() => {
-  //   const toggledBoxes = box.find((item) => item.id === notesId)
-
-  //   getBox()
-
-  // }, [notesId]);
-
-  // useEffect(() => {
-  //   localStorage.setItem("boxes", JSON.stringify(box));
+  //   // localStorage.setItem("boxes", JSON.stringify(box));
+  //   getBox();
   //   console.log("box", box);
   // }, [box]);
 
   const getBox = () => {
-    const selectedBoxes = box.filter((item) => (item.notesId === notesId))
-    
+    const selectedBoxes = box.map((item) => item.notesId === notesId);
+
     Promise.all(
       selectedBoxes.map((item) =>
-      
         axios.get(
-          `http://localhost:3001/profile/${currentUser.id}/${item.notesId}`,
-         
+          `http://localhost:3001/profile/${currentUser.id}/${item.notesId}`
         )
-        
       )
     ).then((response) => {
-      
-      // setBox((prevNote) => [...prevNote, ...response]);
+      response.map((item) => setBox((prevBoxes) => [prevBoxes, ...item.data]));
+
       console.log("getBox", box);
-      console.log('getboxresponse', response)
+  
     });
   };
 
@@ -83,7 +80,7 @@ const CrudService = () => {
 
     axios
       .delete(`http://localhost:3001/profile/${currentUser.id}`, {
-data: {id: item.id}
+        data: { id: item.id },
       })
       .then(() => {
         console.log(item.input);

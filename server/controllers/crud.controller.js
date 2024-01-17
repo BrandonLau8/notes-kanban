@@ -34,10 +34,10 @@ exports.createBox = async (req, res) => {
   }
 };
 
-exports.getBoxes = (req, res) => {
+exports.getBoxes = async (req, res) => {
   const userId = req.params.userId;
   const notesId = req.params.notesId;
-  Crud.findAll({
+  await Crud.findAll({
     where: {
       // userId: userId,
       notesId,
@@ -50,6 +50,7 @@ exports.getBoxes = (req, res) => {
         content: box.dataValues.content,
         notesId: box.dataValues.notesId,
       }));
+      console.log('transformedBoxes',transformedBoxes)
       res.status(200).json(transformedBoxes);
     })
     .catch((err) => {

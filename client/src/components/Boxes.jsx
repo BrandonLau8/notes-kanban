@@ -31,6 +31,7 @@ const Boxes = () => {
       <>
         <div>
           <button onClick={handleAddBox}>Add TextArea</button>
+          <button onClick={getBox}>Get Box</button>
           <input
             type="text"
             value={input}
