@@ -24,26 +24,16 @@ const CrudService = () => {
     getBox();
   }, [notesId]);
 
-  // useEffect(() => {
-  //   // localStorage.setItem("boxes", JSON.stringify(box));
-  //   getBox();
-  //   console.log("box", box);
-  // }, [box]);
-
   const getBox = () => {
-    const selectedBoxes = box.map((item) => item.notesId === notesId);
+    // const selectedBoxes = box.find((item) => item.notesId === notesId);
+    console.log(notesId);
 
-    Promise.all(
-      selectedBoxes.map((item) =>
-        axios.get(
-          `http://localhost:3001/profile/${currentUser.id}/${item.notesId}`
-        )
-      )
-    ).then((response) => {
+    Promise.all([
+      axios.get(`http://localhost:3001/profile/${currentUser.id}/${notesId}`),
+    ]).then((response) => {
       response.map((item) => setBox((prevBoxes) => [prevBoxes, ...item.data]));
 
       console.log("getBox", box);
-  
     });
   };
 
@@ -66,12 +56,8 @@ const CrudService = () => {
         setBoxId(res.data.id);
         setInput("");
         console.log("boxid:", res.data.id);
+    
       });
-
-    return {
-      input: input,
-      content: "",
-    };
   };
 
   const handleDeleteBox = (item) => {

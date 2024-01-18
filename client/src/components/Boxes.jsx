@@ -42,7 +42,10 @@ const Boxes = () => {
       </>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
-        {box.map((item) => (
+        {box ? 
+        box
+        .filter((item) => item.id > 0)
+        .map((item) => (
           <div
             id={item.id}
             style={{ display: "grid", gridTemplateRows: "1fr" }}
@@ -81,11 +84,8 @@ const Boxes = () => {
             />
           </div>
         ))
-     
-      }
+      : null}
       </div>
-
-      {/* ) : null} */}
     </>
   );
 };

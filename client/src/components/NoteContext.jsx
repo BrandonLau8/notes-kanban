@@ -8,7 +8,7 @@ export const NoteProvider = ({ children }) => {
   const navigate = useNavigate();
   const currentUser = AuthService.getCurrentUser();
 
-  const savedNoteId = localStorage.getItem("notesId");
+  const savedNotesId = localStorage.getItem("notesId");
   const savedNotes = localStorage.getItem("notes");
   const savedBoxId = localStorage.getItem("boxId");
   const savedBoxes = localStorage.getItem(`boxes`);
@@ -16,7 +16,7 @@ export const NoteProvider = ({ children }) => {
   const [notes, setNotes] = useState(savedNotes ? JSON.parse(savedNotes) : []);
   const [noteInput, setNoteInput] = useState("");
   const [notesId, setNotesId] = useState(
-    savedNoteId ? parseInt(savedNoteId) : null
+    savedNotesId ? parseInt(savedNotesId) : null
   );
 
 

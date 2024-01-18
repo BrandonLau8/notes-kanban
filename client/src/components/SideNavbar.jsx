@@ -30,7 +30,7 @@ const SideNavbar = () => {
     newLink,
     setNewLink,
     notesId,
-    setNoteId,
+    setNotesId,
     handleAddNote,
     handleDeleteNote,
     changeNoteInput,
@@ -93,7 +93,7 @@ const SideNavbar = () => {
                 <Link
                   to={`/profile/${currentUser.id}/${item.id}`}
                   style={{ color: "white", backgroundColor: "blue" }}
-                  onClick={() => setNoteId(item.id)} // Pass a function to onClick
+                  onClick={() => setNotesId(item.id)} // Pass a function to onClick
                 >
                  {item.noteInput}
                 </Link>
