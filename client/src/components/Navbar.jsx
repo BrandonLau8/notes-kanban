@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { AppBar, Box } from '@mui/material';
 
 const Navbar = ({ isAuthenticated, showModeratorBoard, showAdminBoard, currentUser, logOut }) => {
     // console.log("isAuthenticated:", isAuthenticated);
@@ -7,6 +8,8 @@ const Navbar = ({ isAuthenticated, showModeratorBoard, showAdminBoard, currentUs
     // console.log("showAdminBoard:", showAdminBoard);
     // console.log("currentUser:", currentUser);
     return (
+      <Box sx={{flexGrow:1}}>
+        <AppBar position='static'>
     <nav className="navbar navbar-expand navbar-dark bg-dark">
     <Link to={"/"} className="navbar-brand">
       Kanban Notes
@@ -72,6 +75,8 @@ const Navbar = ({ isAuthenticated, showModeratorBoard, showAdminBoard, currentUs
       </div>
     )}
   </nav>
+  </AppBar>
+  </Box>
   );
 };
 

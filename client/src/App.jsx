@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 import AuthService from "./services/auth.service";
@@ -20,6 +20,9 @@ import BoardAdmin from "./components/BoardAdmin";
 import EventBus from "./common/EventBus";
 import Roles from "./components/Roles";
 import SideNavbar from "./components/SideNavbar";
+
+import CssBaseline from '@mui/material/CssBaseline'
+import { Box } from "@mui/material";
 
 
 const App = () => {
@@ -73,6 +76,8 @@ const App = () => {
   };
 
   return (
+    <Box>
+    <CssBaseline/>
     <div>
       <Navbar
         isAuthenticated={!!currentUser}
@@ -82,7 +87,7 @@ const App = () => {
         logOut={logOut}
       />
 
-      <div className="container mt-3">
+      <div>
         <Routes>
           <Route exact path={"/"} element={<Home />} />
           <Route exact path={"/home"} element={<Home />} />
@@ -101,6 +106,7 @@ const App = () => {
 
       {/* <AuthVerify logOut={logOut}/> */}
     </div>
+    </Box>
   );
 };
 
