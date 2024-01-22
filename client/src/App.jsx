@@ -21,9 +21,8 @@ import EventBus from "./common/EventBus";
 import Roles from "./components/Roles";
 import SideNavbar from "./components/SideNavbar";
 
-import CssBaseline from '@mui/material/CssBaseline'
-import { Box } from "@mui/material";
-
+import CssBaseline from "@mui/material/CssBaseline";
+import { Box, Grid } from "@mui/material";
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -77,35 +76,39 @@ const App = () => {
 
   return (
     <Box>
-    <CssBaseline/>
-    <div>
-      <Navbar
-        isAuthenticated={!!currentUser}
-        showModeratorBoard={showModeratorBoard}
-        showAdminBoard={showAdminBoard}
-        currentUser={currentUser}
-        logOut={logOut}
-      />
-
+      <CssBaseline />
       <div>
-        <Routes>
-          <Route exact path={"/"} element={<Home />} />
-          <Route exact path={"/home"} element={<Home />} />
-          <Route exact path="/login" element={<Login />} />
-          <Route exact path="/register" element={<Register />} />
-          <Route path="/profile" element={<SideNavbar />}>
-            <Route path="/profile/:userId" element={<ProfileHeader />} />
-            <Route path=":userId/*" element={<Profile />} />
-    
-          </Route>
-          <Route path="/user" element={<BoardUser />} />
-          <Route path="/mod" element={<BoardModerator />} />
-          <Route path="/admin" element={<BoardAdmin />} />
-        </Routes>
-      </div>
+        <Navbar
+          isAuthenticated={!!currentUser}
+          showModeratorBoard={showModeratorBoard}
+          showAdminBoard={showAdminBoard}
+          currentUser={currentUser}
+          logOut={logOut}
+        />
 
-      {/* <AuthVerify logOut={logOut}/> */}
-    </div>
+        <div>
+          <Routes>
+            <Route exact path={"/"} element={<Home />} />
+            <Route exact path={"/home"} element={<Home />} />
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/register" element={<Register />} />
+
+            <Route path="/profile/:userId/*" element={<Profile />} />
+
+            <Route path="/user" element={<BoardUser />} />
+            <Route path="/mod" element={<BoardModerator />} />
+            <Route path="/admin" element={<BoardAdmin />} />
+          </Routes>
+
+          {/* <Grid container spacing={2}>
+          <Routes>
+         
+          </Routes>
+          </Grid> */}
+        </div>
+
+        {/* <AuthVerify logOut={logOut}/> */}
+      </div>
     </Box>
   );
 };

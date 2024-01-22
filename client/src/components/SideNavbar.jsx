@@ -4,23 +4,23 @@ import "../SideNavbar.css";
 import CrudService from "../services/crud.service";
 import Notes from "../services/note.service";
 import { Outlet } from "react-router-dom";
-import PropTypes from 'prop-types';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
+import PropTypes from "prop-types";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
 
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 
-
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { Grid } from "@mui/material";
 
 const SideNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -89,52 +89,40 @@ const SideNavbar = () => {
     setIsEditing(!isEditing);
   };
 
-  const drawerWidth = 240;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [isClosing, setIsClosing] = React.useState(false);
 
-    const [mobileOpen, setMobileOpen] = React.useState(false);
-    const [isClosing, setIsClosing] = React.useState(false);
-  
-    const handleDrawerClose = () => {
-      setIsClosing(true);
-      setMobileOpen(false);
-    };
-  
-    const handleDrawerTransitionEnd = () => {
-      setIsClosing(false);
-    };
-  
-    const handleDrawerToggle = () => {
-      if (!isClosing) {
-        setMobileOpen(!mobileOpen);
-      }
-    };
-  
+  const handleDrawerClose = () => {
+    setIsClosing(true);
+    setMobileOpen(false);
+  };
 
+  const handleDrawerTransitionEnd = () => {
+    setIsClosing(false);
+  };
+
+  const handleDrawerToggle = () => {
+    if (!isClosing) {
+      setMobileOpen(!mobileOpen);
+    }
+  };
+
+  const drawerWidth = 500;
   const drawer = (
     <div>
-      <Toolbar />
-      <Divider />
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? 'inboxicon' : 'mailicon'}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+        <ListItemButton onClick={handleAddNote}>New Note</ListItemButton>
+        {notes.slice(1).map((item) => (
+          <ListItem key={item.id} id={item.id}>
+            <ListItemButton
+              to={`/profile/${currentUser.id}/${item.id}`}
+              onClick={() => setNotesId(item.id)} // Pass a function to onClick
+            >
+              <ListItemText>{item.noteInput}</ListItemText>
             </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? '<InboxIcon />' : '<MailIcon />'}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+
+            <ListItemButton onClick={() => handleDeleteNote(item.id)}>
+              <ListItemText> Delete + {item.id}</ListItemText>
             </ListItemButton>
           </ListItem>
         ))}
@@ -144,99 +132,54 @@ const SideNavbar = () => {
 
   return (
     <>
-      <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+      
+        <Box
+          component="nav"
+          sx={{
+            width: { sm: drawerWidth },
+            flexShrink: { sm: 0 },
+            flexGrow: 1,
+          }}
+          aria-label="mailbox folders"
+        >
+          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+          <Drawer
+            variant="temporary" //for smaller screens
+            open={mobileOpen}
+            git
+            onTransitionEnd={handleDrawerTransitionEnd}
+            onClose={handleDrawerClose}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Responsive drawer
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onTransitionEnd={handleDrawerTransitionEnd}
-          onClose={handleDrawerClose}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
+            {drawer}
+          </Drawer>
+          <Drawer
+            variant="permanent" //for wider screens
+            sx={{
+              display: { xs: "none", sm: "block" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+                marginTop: 9,
+                bgcolor: "gray",
+              },
+            }}
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Box>
+      
 
-{/*         
-      <div id="mySidebar" className="sidebar" style={{ width: sidebarWidth }}>
-        <div className="burger" id="burger-container" onClick={myFunction}>
-          <div className="bar1"></div>
-          <div className="bar2"></div>
-          <div className="bar3"></div>
-        </div>
-
-        {isOpen ? (
-          <div>
-            <div>
-            <button onClick={handleAddNote}>New Note</button>
-            </div>
-            <div>
-            {notes.slice(1).map((item) => (
-              <div key={item.id} id={item.id}>
-                <div>
-                <Link
-                  to={`/profile/${currentUser.id}/${item.id}`}
-                  style={{ color: "white", backgroundColor: "blue" }}
-                  onClick={() => setNotesId(item.id)} // Pass a function to onClick
-                >
-                 {item.noteInput}
-                </Link>
-                
-                <button onClick={() => handleDeleteNote(item.id)}>Delete + {item.id}</button>
-              </div>
-              </div>
-            ))}
-            </div>
-          </div>
-        ) : null}
-
-        <div id="main"></div>
-      </div> */}
       <Outlet />
     </>
   );
