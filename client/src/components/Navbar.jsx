@@ -12,8 +12,8 @@ const Navbar = ({
   logOut,
 }) => {
   return (
-    <Box sx={{ flexGrow: 1, zIndex: 1 }}>
-      <AppBar position="static">
+    <Box sx={{ display:'flex' }}>
+      <AppBar position="fixed"  sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
           <Link
             component={RouterLink}

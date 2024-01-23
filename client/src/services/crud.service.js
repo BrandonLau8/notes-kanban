@@ -38,7 +38,8 @@ const CrudService = () => {
   };
 
   const handleAddBox = (e) => {
-    const defaultContent = "New Content";
+    const defaultContent = "";
+   
     axios
       .post(`http://localhost:3001/profile/${currentUser.id}/${notesId}`, {
         input: input,

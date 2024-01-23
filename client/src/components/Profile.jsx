@@ -7,8 +7,11 @@ import toggleInputs from "../utilities/toggleInputs";
 import NoteService from "../services/note.service";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Stack, Toolbar, Input } from "@mui/material";
+
 import SideNavbar from "./SideNavbar";
+import { useNavigate } from "react-router-dom";
+import AuthService from "../services/auth.service";
 
 const Profile = () => {
   const { isEditing, setIsEditing, toggleEditMode } = toggleInputs();
@@ -24,11 +27,18 @@ const Profile = () => {
     handleNoteSave,
   } = NoteService();
 
+  const currentUser = AuthService.getCurrentUser();
+
   // Find the note with the specified notesId
+
   const currentNote = notes.find((note) => note.id === notesId);
+  
+
+
 
   const inputRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isEditing) {
@@ -49,59 +59,58 @@ const Profile = () => {
     const toggledNote = notes.find((note) => note.id === notesId);
     if (toggledNote) {
       currentNote.noteInput = toggledNote.noteInput;
+    }
+    if (toggledNote === undefined) {
+      
+      navigate(`/profile/${currentUser.id}`);
     } else {
       currentNote.noteInput = null;
     }
     console.log("noteId:", notesId);
   }, [notesId]);
 
-  const drawerWidth = 500;
-
   return (
     <>
-    <Grid container spacing={2}>
-      <Grid item md={5}>
-    <SideNavbar/>
-    </Grid>
-    <Grid item md={7}>
-      <Box
-        component="main"
-        sx={{
-          flexGrow:1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <ProfileHeader />
-        <div>
-          {currentNote && (
-            <div key={currentNote.id} onClick={toggleEditMode}>
-              {isEditing ? (
-                <input
-                  ref={inputRef}
-                  type="text"
-                  onChange={changeNoteInput}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      toggleEditMode();
-
-                      setTimeout(() => {
-                        handleNoteSave();
-                      }, 0);
-                    }
-                  }}
-                  readOnly={isEditing ? false : true} // Check this line
-                />
-              ) : (
-                <strong>{currentNote.noteInput}</strong>
-              )}
-            </div>
-          )}
-        </div>
-        <Boxes />
+      <Box sx={{ display: "flex" }}>
+        <SideNavbar />
+        
+        <Stack sx={{ flexGrow: 1, p: 3, bgcolor: "gray" }}>
+          <Toolbar />
+          
+          
+            {currentNote.id ? (
+              <Box sx={{ bgcolor: "blue" }}>
+              <div key={currentNote.id} onClick={toggleEditMode}>
+                {isEditing ? (
+                  
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    onChange={changeNoteInput}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        toggleEditMode();
+                        setTimeout(() => {
+                          handleNoteSave();
+                        }, 0);
+                      }
+                    }}
+                    readOnly={isEditing ? false : true} // Check this line
+                  />
+                ) : (
+                  <strong>{currentNote.noteInput}</strong>
+                )}
+              </div>
+              </Box>
+            ):<Input disabled defaultValue="Disabled" />}
+          
+          {currentNote.id ? (
+            <Box sx={{ bgcolor: "yellow" }}>
+              <Boxes />
+            </Box>
+          ): <Toolbar sx={{ bgcolor: "yellow" }}/>}
+        </Stack>
       </Box>
-      </Grid>
-      </Grid>
       <Outlet />
     </>
   );

@@ -8,6 +8,8 @@ module.exports = (sequelize, Sequelize) => {
     },
     input: {
       type: Sequelize.STRING,
+      allowNull: false,
+      notEmpty: true,
     },
     content: {
       type: Sequelize.STRING,

@@ -80,8 +80,7 @@ const App = () => {
       <div>
         <Navbar
           isAuthenticated={!!currentUser}
-          showModeratorBoard={showModeratorBoard}
-          showAdminBoard={showAdminBoard}
+        
           currentUser={currentUser}
           logOut={logOut}
         />

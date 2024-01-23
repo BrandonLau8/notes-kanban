@@ -21,6 +21,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Grid } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const SideNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -107,78 +108,49 @@ const SideNavbar = () => {
     }
   };
 
-  const drawerWidth = 500;
-  const drawer = (
-    <div>
-      <List>
-        <ListItemButton onClick={handleAddNote}>New Note</ListItemButton>
-        {notes.slice(1).map((item) => (
-          <ListItem key={item.id} id={item.id}>
-            <ListItemButton
-              to={`/profile/${currentUser.id}/${item.id}`}
-              onClick={() => setNotesId(item.id)} // Pass a function to onClick
-            >
-              <ListItemText>{item.noteInput}</ListItemText>
-            </ListItemButton>
-
-            <ListItemButton onClick={() => handleDeleteNote(item.id)}>
-              <ListItemText> Delete + {item.id}</ListItemText>
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
-
   return (
     <>
-      
-        <Box
-          component="nav"
-          sx={{
-            width: { sm: drawerWidth },
-            flexShrink: { sm: 0 },
-            flexGrow: 1,
-          }}
-          aria-label="mailbox folders"
-        >
-          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-          <Drawer
-            variant="temporary" //for smaller screens
-            open={mobileOpen}
-            git
-            onTransitionEnd={handleDrawerTransitionEnd}
-            onClose={handleDrawerClose}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-            sx={{
-              display: { xs: "block", sm: "none" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                width: drawerWidth,
-              },
-            }}
-          >
-            {drawer}
-          </Drawer>
-          <Drawer
-            variant="permanent" //for wider screens
-            sx={{
-              display: { xs: "none", sm: "block" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                width: drawerWidth,
-                marginTop: 9,
-                bgcolor: "gray",
-              },
-            }}
-            open
-          >
-            {drawer}
-          </Drawer>
+      <Drawer
+        sx={{
+          width: 350,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: 350,
+            boxSizing: "border-box",
+          },
+        }}
+        variant="permanent"
+        anchor="left"
+      >
+        <Toolbar />
+        <Box sx={{ overflow: "auto" }}>
+          <List>
+            <ListItemButton onClick={handleAddNote}>New Note</ListItemButton>
+            {notes.slice(1).map((item) => (
+              <ListItem
+                key={item.id}
+                id={item.id}
+                secondaryAction={
+                  <IconButton
+                    edge="end"
+                    aria-label="comments"
+                    onClick={() => handleDeleteNote(item.id)}
+                  >
+                    <ClearIcon />
+                  </IconButton>
+                }
+              >
+                <ListItemButton
+                  to={`/profile/${currentUser.id}/${item.id}`}
+                  onClick={() => setNotesId(item.id)} // Pass a function to onClick
+                >
+                  <ListItemText>{item.noteInput}</ListItemText>
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
         </Box>
-      
+      </Drawer>
 
       <Outlet />
     </>
