@@ -125,7 +125,7 @@ const SideNavbar = () => {
         <Toolbar />
         <Box sx={{ overflow: "auto" }}>
           <List>
-            <ListItemButton onClick={handleAddNote}>New Note</ListItemButton>
+            <ListItemButton variant='text' onClick={handleAddNote}><Typography variant="h1" color='textPrimary' fontSize={20}>New Note</Typography></ListItemButton>
             {notes.slice(1).map((item) => (
               <ListItem
                 key={item.id}

@@ -4,6 +4,7 @@ import toggleInputs from "../utilities/toggleInputs";
 import NoteService from "../services/note.service";
 import { Link } from "react-router-dom";
 import { useLocation} from "react-router-dom";
+import { TextField, Typography } from "@mui/material";
 
 
 const CurrentNote = () => {
@@ -29,13 +30,14 @@ const CurrentNote = () => {
 
   return (
     <>
-      <div>
+      <Box sx={{ width: '100%', maxWidth: 500 }}>
         {currentNote && (
-          <div key={currentNote.id} onClick={toggleEditMode}>
+          <Box key={currentNote.id} onClick={toggleEditMode}>
             {isEditing ? (
-              <input
+              <TextField
                 ref={inputRef}
                 type="text"
+                // variant="outlined"
                 onChange={changeNoteInput}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -46,14 +48,16 @@ const CurrentNote = () => {
                     }, 0);
                   }
                 }}
-                readOnly={isEditing ? false : true} // Check this line
+                // readOnly={isEditing ? false : true} // Check this line
               />
             ) : (
-              <strong>{currentNote.noteInput}</strong>
+              <Box sx={{ width: '100%', maxWidth: 500 }}>
+              <Typography variant="h1">{currentNote.noteInput}</Typography>
+              </Box>
             )}
-          </div>
+          </Box>
         )}
-      </div>
+      </Box>
     </>
   );
 };

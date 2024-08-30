@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Crud from "../services/crud.service";
 import NoteService from "../services/note.service";
 import BoxInput from "./BoxInput";
+import { Box, Button, TextareaAutosize, TextField, Typography } from "@mui/material";
 
 const Boxes = () => {
   const {
@@ -29,16 +30,17 @@ const Boxes = () => {
   return (
     <>
       <>
-        <div>
-          <button onClick={input !== '' ? handleAddBox: null}>Add TextArea</button>
+        <Box display={'flex'} gap={2}>
+          <Button variant="contained" onClick={input !== '' ? handleAddBox: null}>Add TextArea</Button>
 
-          <input
+          <TextField
             type="text"
+            variant="outlined"
             value={input}
             placeholder="what you want"
             onChange={changeInput}
           />
-        </div>
+        </Box>
       </>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
@@ -51,15 +53,17 @@ const Boxes = () => {
             style={{ display: "grid", gridTemplateRows: "1fr" }}
           >
             <div>
-              <label>{item.input}</label>
-              <button onClick={() => handleDeleteBox(item)}>
+              <Typography paddingTop={2} variant="h5">{item.input}</Typography>
+              <Button variant="contained" color="error" onClick={() => handleDeleteBox(item)}>
                 Delete TextArea
-              </button>
+              </Button>
             </div>
 
-            <textarea
-              rows="10"
-              style={{ resize: "none" }}
+            <TextareaAutosize
+              // rows="10"
+              minRows={10}
+      
+              style={{ resize: "none", marginTop:"20px", marginRight:"20px", fontSize: "18px"}}
               value={item.content}
               onChange={(e) => {
                 const newValue = e.target.value;

@@ -7,7 +7,7 @@ import toggleInputs from "../utilities/toggleInputs";
 import NoteService from "../services/note.service";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { Box, Grid, Stack, Toolbar, Input } from "@mui/material";
+import { Box, Grid, Stack, Toolbar, Input, TextField, Typography } from "@mui/material";
 
 import SideNavbar from "./SideNavbar";
 import { useNavigate } from "react-router-dom";
@@ -69,18 +69,20 @@ const Profile = () => {
     console.log("noteId:", notesId);
   }, [notesId]);
 
+  console.log(currentNote.id)
+
   return (
     <>
       <Box sx={{ display: "flex" }}>
         <SideNavbar />
         
-        <Stack sx={{ flexGrow: 1, p: 3, bgcolor: "gray" }}>
+        <Stack sx={{ flexGrow: 1, p: 3, bgcolor: "" }}>
           <Toolbar />
           
           
             {currentNote.id ? (
-              <Box sx={{ bgcolor: "blue" }}>
-              <div key={currentNote.id} onClick={toggleEditMode}>
+              <Box sx={{ bgcolor: "" }}>
+              <Box key={currentNote.id} onClick={toggleEditMode}>
                 {isEditing ? (
                   
                   <input
@@ -95,20 +97,28 @@ const Profile = () => {
                         }, 0);
                       }
                     }}
-                    readOnly={isEditing ? false : true} // Check this line
+                    style={{
+                      width: '300px',       // Adjust width as needed
+                      height: '40px',       // Adjust height as needed
+                      fontSize: '16px',     // Adjust font size as needed
+                      padding: '10px',      // Adjust padding for a larger input area
+                      border: 'none',
+                      outline:'none'
+                    }}
+                    // readOnly={isEditing ? false : true} // Check this line
                   />
                 ) : (
-                  <strong>{currentNote.noteInput}</strong>
+                  <Typography variant="h6">{currentNote.noteInput}</Typography>
                 )}
-              </div>
               </Box>
-            ):<Input disabled defaultValue="Disabled" />}
+              </Box>
+            ):<Input disabled defaultValue="Disabled" />} 
           
-          {currentNote.id ? (
-            <Box sx={{ bgcolor: "yellow" }}>
+           {currentNote.id ? (
+            <Box sx={{ bgcolor: "" }}>
               <Boxes />
             </Box>
-          ): <Toolbar sx={{ bgcolor: "yellow" }}/>}
+          ): <Toolbar sx={{ bgcolor: "" }}/>}
         </Stack>
       </Box>
       <Outlet />
